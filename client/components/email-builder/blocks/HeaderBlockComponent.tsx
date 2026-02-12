@@ -48,15 +48,14 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
       {/* Header Main Row - Logo and Links */}
       <div
         style={{
-          width: "100%",
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-start",
-          gap: "0",
+          width: "100%",
+          flexWrap: "nowrap",
         }}
       >
         {/* Logo */}
-        <div style={{ flexShrink: 0, minWidth: "fit-content" }}>
+        <div style={{ flexGrow: 0, flexShrink: 0, marginRight: "auto" }}>
           {block.logo ? (
             <img
               src={block.logo}
@@ -65,7 +64,6 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
                 width: `${block.logoWidth}px`,
                 height: `${block.logoHeight}px`,
                 objectFit: "contain",
-                display: "block",
               }}
             />
           ) : (
@@ -84,8 +82,8 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
               }}
             >
               <label style={{ cursor: "pointer", textAlign: "center" }}>
-                <Upload className="w-4 h-4 text-gray-400 mb-1 mx-auto" />
-                <p className="text-xs text-gray-500">Logo Image</p>
+                <Upload className="w-4 h-4 text-gray-400 mb-1" />
+                <p style={{ fontSize: "12px", color: "#999", margin: "4px 0 0 0" }}>Logo Image</p>
                 <input
                   type="file"
                   accept="image/*"
@@ -100,12 +98,10 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
         {/* Links */}
         <div style={{
           display: "flex",
-          gap: "8px",
+          gap: "12px",
           alignItems: "center",
-          justifyContent: "flex-end",
-          flex: 1,
-          marginLeft: "auto",
-          paddingLeft: "24px",
+          flexGrow: 0,
+          flexShrink: 0,
         }}>
           {block.links.length > 0 ? (
             block.links.map((link, index) => (
