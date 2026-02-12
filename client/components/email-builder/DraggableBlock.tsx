@@ -1,0 +1,109 @@
+import React from "react";
+import { useDrag, useDrop } from "react-dnd";
+import { ContentBlock } from "./types";
+import { BlockRenderer } from "./BlockRenderer";
+import { BlockActions } from "./BlockActions";
+import { cn } from "@/lib/utils";
+
+interface DraggableBlockProps {
+  block: ContentBlock;
+  index: number;
+  totalBlocks: number;
+  isSelected: boolean;
+  isEditing?: boolean;
+  selectedFooterElement?: string | null;
+  onBlockUpdate: (block: ContentBlock) => void;
+  onBlockSelect: (id: string) => void;
+  onEditingBlockChange?: (id: string | null) => void;
+  onFooterElementSelect?: (element: string | null) => void;
+  onMoveBlock: (dragIndex: number, hoverIndex: number) => void;
+  onAddBlock: (block: ContentBlock, position: number) => void;
+  onDuplicate: (block: ContentBlock, position: number) => void;
+  onDelete: (blockId: string) => void;
+}
+
+export const DraggableBlock: React.FC<DraggableBlockProps> = ({
+  block,
+  index,
+  totalBlocks,
+  isSelected,
+  isEditing,
+  selectedFooterElement,
+  onBlockUpdate,
+  onBlockSelect,
+  onEditingBlockChange,
+  onFooterElementSelect,
+  onMoveBlock,
+  onAddBlock,
+  onDuplicate,
+  onDelete,
+}) => {
+  const [{ isDragging }, drag] = useDrag(
+    () => ({
+      type: "canvas-block",
+      item: () => ({ index, blockId: block.id }),
+      collect: (monitor) => ({
+        isDragging: !!monitor.isDragging(),
+      }),
+    }),
+    [index, block.id],
+  );
+
+  const [{ isOver }, drop] = useDrop(
+    () => ({
+      accept: "canvas-block",
+      hover: (item: { index: number; blockId: string }) => {
+        if (item.index !== index) {
+          onMoveBlock(item.index, index);
+          item.index = index;
+        }
+      },
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+      }),
+    }),
+    [index, onMoveBlock],
+  );
+
+  const ref = React.useRef<HTMLDivElement>(null);
+  drag(drop(ref));
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "group relative cursor-move",
+        isDragging && "opacity-50 scale-95 transition-all",
+        isOver && "ring-2 ring-valasys-orange rounded-lg",
+      )}
+    >
+      <BlockRenderer
+        block={block}
+        isSelected={isSelected}
+        isEditing={isEditing}
+        selectedFooterElement={selectedFooterElement}
+        onBlockUpdate={onBlockUpdate}
+        onBlockSelect={onBlockSelect}
+        onEditingBlockChange={onEditingBlockChange}
+        onFooterElementSelect={onFooterElementSelect}
+        onAddBlock={onAddBlock}
+        onDuplicate={onDuplicate}
+        onDelete={onDelete}
+        blockIndex={index}
+      />
+
+      {isSelected && (
+        <div className="relative z-50 px-4 py-3 bg-gray-50 border-t border-gray-200">
+          <BlockActions
+            block={block}
+            blockIndex={index}
+            totalBlocks={totalBlocks}
+            onAddBlock={onAddBlock}
+            onDuplicate={onDuplicate}
+            onDelete={() => onDelete(block.id)}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
