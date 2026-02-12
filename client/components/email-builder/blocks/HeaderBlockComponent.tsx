@@ -37,98 +37,119 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
 
   return (
     <div
-      className={`transition-all flex items-center justify-between ${
-        isSelected ? "ring-2 ring-valasys-orange" : ""
+      className={`transition-all ${
+        isSelected ? "border-2 border-dashed border-valasys-orange" : ""
       }`}
       style={{
         backgroundColor: block.backgroundColor,
         padding: `${block.padding}px`,
       }}
     >
-      {/* Logo */}
-      <div className="flex-shrink-0">
-        {block.logo ? (
-          <img
-            src={block.logo}
-            alt={block.logoAlt || "Logo"}
-            style={{
-              width: `${block.logoWidth}px`,
-              height: `${block.logoHeight}px`,
-              objectFit: "contain",
-            }}
-          />
-        ) : (
-          <label className="flex items-center justify-center cursor-pointer hover:bg-gray-100 rounded p-2">
-            <div className="flex flex-col items-center">
-              <Upload className="w-4 h-4 text-gray-400 mb-1" />
-              <p className="text-xs text-gray-500">Logo</p>
-            </div>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
+      {/* Header Main Row - Logo and Links */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+          flexWrap: "nowrap",
+        }}
+      >
+        {/* Logo */}
+        <div style={{ flexShrink: 0, marginRight: "auto" }}>
+          {block.logo ? (
+            <img
+              src={block.logo}
+              alt={block.logoAlt || "Logo"}
+              style={{
+                width: `${block.logoWidth}px`,
+                height: `${block.logoHeight}px`,
+                objectFit: "contain",
+              }}
             />
-          </label>
-        )}
-      </div>
-
-      {/* Company Name */}
-      <div className="flex-grow text-center px-4">
-        <span
-          style={{
-            fontSize: `${block.companyFontSize}px`,
-            color: block.companyFontColor,
-            fontWeight: block.companyFontWeight,
-            display: "block",
-            position: "relative",
-          }}
-        >
-          {block.companyName || "Company Name"}
-          {!block.companyName && (
-            <span
-              className="text-xs text-gray-400"
-              style={{ fontSize: "12px", fontWeight: "normal" }}
+          ) : (
+            <div
+              style={{
+                width: `${block.logoWidth}px`,
+                height: `${block.logoHeight}px`,
+                border: "2px dashed #d0d0d0",
+                borderRadius: "4px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "column",
+                cursor: "pointer",
+                backgroundColor: "#f9f9f9",
+              }}
             >
-              (Edit in Settings)
+              <label style={{ cursor: "pointer", textAlign: "center" }}>
+                <Upload className="w-4 h-4 text-gray-400 mb-1" />
+                <p style={{ fontSize: "12px", color: "#999", margin: "4px 0 0 0" }}>Logo Image</p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  style={{ display: "none" }}
+                />
+              </label>
+            </div>
+          )}
+        </div>
+
+        {/* Links */}
+        <div style={{
+          display: "flex",
+          gap: "12px",
+          alignItems: "center",
+          flexShrink: 0,
+        }}>
+          {block.links.length > 0 ? (
+            block.links.map((link, index) => (
+              <React.Fragment key={link.id}>
+                <a
+                  href={link.url}
+                  style={{
+                    fontSize: `${block.linksFontSize}px`,
+                    color: block.linksFontColor,
+                    textDecoration: "none",
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {link.text}
+                </a>
+                {index < block.links.length - 1 && (
+                  <span style={{ color: block.linksFontColor }}>|</span>
+                )}
+              </React.Fragment>
+            ))
+          ) : (
+            <span
+              style={{
+                fontSize: `${block.linksFontSize}px`,
+                color: block.linksFontColor,
+              }}
+            >
+              No links
             </span>
           )}
-        </span>
+        </div>
       </div>
 
-      {/* Links */}
-      <div className="flex-shrink-0 flex gap-2 items-center">
-        {block.links.length > 0 ? (
-          block.links.map((link, index) => (
-            <React.Fragment key={link.id}>
-              <a
-                href={link.url}
-                style={{
-                  fontSize: `${block.linksFontSize}px`,
-                  color: block.linksFontColor,
-                  textDecoration: "none",
-                  cursor: "pointer",
-                }}
-              >
-                {link.text}
-              </a>
-              {index < block.links.length - 1 && (
-                <span style={{ color: block.linksFontColor }}>|</span>
-              )}
-            </React.Fragment>
-          ))
-        ) : (
+      {/* Company Name - Below Logo and Links */}
+      {block.companyName && (
+        <div style={{ textAlign: block.alignment as any, marginTop: "12px" }}>
           <span
             style={{
-              fontSize: `${block.linksFontSize}px`,
-              color: block.linksFontColor,
+              fontSize: `${block.companyFontSize}px`,
+              color: block.companyFontColor,
+              fontWeight: block.companyFontWeight,
+              display: "block",
             }}
-            className="text-xs"
           >
-            No links (add in Settings)
+            {block.companyName}
           </span>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

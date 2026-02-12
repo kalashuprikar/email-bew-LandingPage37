@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import React from "react";
 import { Copy, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FooterWithSocialBlock } from "../types";
@@ -40,7 +39,8 @@ export const FooterWithSocialBlockComponent: React.FC<
     subField: string,
     value: string,
   ) => {
-    const updatedField = { ...block[field], [subField]: value };
+    const fieldValue = block[field];
+    const updatedField = { ...(fieldValue as any), [subField]: value };
     onContentChange(field, updatedField);
   };
 
@@ -57,6 +57,48 @@ export const FooterWithSocialBlockComponent: React.FC<
     setSelectedSection(element);
   };
 
+  const handleCopySection = (sectionType: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      // Copy section data to clipboard as JSON
+      const sectionData: any = {
+        type: block.type,
+        sectionType,
+        data: block[sectionType as keyof typeof block],
+      };
+      navigator.clipboard.writeText(JSON.stringify(sectionData, null, 2));
+      // No notification - just copy silently
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
+  const handleDeleteSection = (sectionType: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    // Confirm deletion
+    if (confirm("Are you sure you want to delete this section?")) {
+      // Reset the section with empty/default values
+      const fieldValue = block[sectionType as keyof typeof block];
+      const resetValue = { ...(fieldValue as any) };
+
+      // Clear all content-related fields based on section type
+      if (sectionType === "social") {
+        resetValue.platforms = [];
+      } else if (sectionType === "unsubscribeLink") {
+        resetValue.text = "";
+        resetValue.url = "";
+      } else {
+        // For other sections (enterpriseName, address, subscriptionText)
+        if ("content" in resetValue) {
+          resetValue.content = "";
+        }
+      }
+
+      onContentChange(sectionType, resetValue);
+      setSelectedSection(null);
+    }
+  };
+
   return (
     <footer
       className={`transition-all ${isSelected ? "ring-2 ring-valasys-orange" : ""}`}
@@ -68,259 +110,363 @@ export const FooterWithSocialBlockComponent: React.FC<
     >
       <div className="space-y-4">
         {/* Social Media Section */}
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            handleElementSelect("social");
-          }}
-          className={`py-4 px-2 cursor-pointer hover:bg-gray-50 rounded transition-all ${
-            selectedElement === "social" ? "ring-2 ring-valasys-orange" : ""
-          }`}
-          style={{
-            width:
-              block.social.widthUnit === "%"
-                ? `${block.social.width}%`
-                : `${block.social.width}px`,
-            margin:
-              block.social.alignment === "center"
-                ? "0 auto"
-                : block.social.alignment === "right"
-                  ? "0 0 0 auto"
-                  : undefined,
-          }}
-        >
+        {block.social.platforms.length > 0 && (
           <div
-            className={`flex flex-wrap gap-2`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleElementSelect("social");
+            }}
+            className={`py-4 px-2 cursor-pointer rounded transition-all relative ${
+              selectedElement === "social"
+                ? "ring-2 ring-valasys-orange"
+                : ""
+            }`}
             style={{
-              justifyContent:
-                block.social.alignment === "left"
-                  ? "flex-start"
-                  : block.social.alignment === "center"
-                    ? "center"
-                    : "flex-end",
+              width:
+                block.social.widthUnit === "%"
+                  ? `${block.social.width}%`
+                  : `${block.social.width}px`,
+              margin:
+                block.social.alignment === "center"
+                  ? "0 auto"
+                  : block.social.alignment === "right"
+                    ? "0 0 0 auto"
+                    : undefined,
             }}
           >
-            {block.social.platforms.map((platform, index) => {
-              const iconColor = getIconColor(platform.icon);
-              const iconBg = getIconBackgroundColor(
-                block.social.theme,
-                platform.icon,
-              );
+            <div
+              className={`flex flex-wrap gap-2`}
+              style={{
+                justifyContent:
+                  block.social.alignment === "left"
+                    ? "flex-start"
+                    : block.social.alignment === "center"
+                      ? "center"
+                      : "flex-end",
+              }}
+            >
+              {block.social.platforms.map((platform, index) => {
+                const iconColor = getIconColor(platform.icon);
+                const iconBg = getIconBackgroundColor(
+                  block.social.theme,
+                  platform.icon,
+                );
 
-              const sizeMap = {
-                small: "w-5 h-5",
-                medium: "w-6 h-6",
-                large: "w-8 h-8",
-              };
+                const sizeMap = {
+                  small: "w-5 h-5",
+                  medium: "w-6 h-6",
+                  large: "w-8 h-8",
+                };
 
-              const shapeClasses = {
-                rounded: "rounded-md",
-                circle: "rounded-full",
-                square: "rounded-none",
-              };
+                const shapeClasses = {
+                  rounded: "rounded-md",
+                  circle: "rounded-full",
+                  square: "rounded-none",
+                };
 
-              return (
-                <a
-                  key={index}
-                  href={platform.url}
-                  className={`${sizeMap[block.social.size]} ${shapeClasses[block.social.shape]} flex items-center justify-center transition-transform hover:scale-110`}
-                  style={{
-                    backgroundColor: iconBg,
-                    color: iconColor,
-                    marginRight:
-                      index < block.social.platforms.length - 1
-                        ? `${block.social.spacing}px`
-                        : "0",
-                  }}
+                return (
+                  <a
+                    key={index}
+                    href={platform.url}
+                    className={`${sizeMap[block.social.size]} ${shapeClasses[block.social.shape]} flex items-center justify-center transition-transform hover:scale-110`}
+                    style={{
+                      backgroundColor: iconBg,
+                      color: iconColor,
+                      marginRight:
+                        index < block.social.platforms.length - 1
+                          ? `${block.social.spacing}px`
+                          : "0",
+                    }}
+                  >
+                    {getSocialIcon(platform.icon, iconColor)}
+                  </a>
+                );
+              })}
+            </div>
+            {selectedElement === "social" && (
+              <div className="flex gap-1 justify-center mt-2">
+                <button
+                  onClick={(e) => handleCopySection("social", e)}
+                  title="Copy section"
+                  className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
                 >
-                  {getSocialIcon(platform.icon, iconColor)}
-                </a>
-              );
-            })}
+                  <Copy className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={(e) => handleDeleteSection("social", e)}
+                  title="Delete section"
+                  className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
-        </div>
+        )}
 
         {/* Enterprise Name */}
-        <div
-          className={`cursor-pointer hover:bg-gray-50 rounded p-2 transition-all ${
-            selectedElement === "enterpriseName"
-              ? "ring-2 ring-valasys-orange"
-              : ""
-          }`}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleElementSelect("enterpriseName");
-          }}
-        >
-          {selectedElement === "enterpriseName" ? (
-            <input
-              type="text"
-              value={block.enterpriseName.content}
-              onChange={(e) =>
-                handleFieldChange("enterpriseName", "content", e.target.value)
-              }
-              autoFocus
-              className="w-full border border-valasys-orange rounded px-2 py-1 text-center"
-              style={{
-                fontSize: `${block.enterpriseName.fontSize}px`,
-                fontWeight: block.enterpriseName.fontWeight,
-                color: block.enterpriseName.fontColor,
-              }}
-            />
-          ) : (
-            <h3
-              style={{
-                fontSize: `${block.enterpriseName.fontSize}px`,
-                fontWeight: block.enterpriseName.fontWeight,
-                color: block.enterpriseName.fontColor,
-                fontFamily: block.enterpriseName.fontFamily,
-                fontStyle: block.enterpriseName.fontStyle,
-                margin: 0,
-                padding: `${block.enterpriseName.padding}px`,
-              }}
-            >
-              {block.enterpriseName.content}
-            </h3>
-          )}
-        </div>
-
-        {/* Address */}
-        <div
-          className={`cursor-pointer hover:bg-gray-50 rounded p-2 transition-all ${
-            selectedElement === "address" ? "ring-2 ring-valasys-orange" : ""
-          }`}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleElementSelect("address");
-          }}
-        >
-          {selectedElement === "address" ? (
-            <textarea
-              value={block.address.content}
-              onChange={(e) =>
-                handleFieldChange("address", "content", e.target.value)
-              }
-              autoFocus
-              className="w-full border border-valasys-orange rounded px-2 py-1 text-center"
-              style={{
-                fontSize: `${block.address.fontSize}px`,
-                fontWeight: block.address.fontWeight,
-                color: block.address.fontColor,
-              }}
-              rows={2}
-            />
-          ) : (
-            <p
-              style={{
-                fontSize: `${block.address.fontSize}px`,
-                fontWeight: block.address.fontWeight,
-                color: block.address.fontColor,
-                fontFamily: block.address.fontFamily,
-                fontStyle: block.address.fontStyle,
-                margin: 0,
-                padding: `${block.address.padding}px`,
-                lineHeight: "1.6",
-              }}
-            >
-              {block.address.content}
-            </p>
-          )}
-        </div>
-
-        {/* Subscription Text */}
-        <div
-          className={`cursor-pointer hover:bg-gray-50 rounded p-2 transition-all ${
-            selectedElement === "subscriptionText"
-              ? "ring-2 ring-valasys-orange"
-              : ""
-          }`}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleElementSelect("subscriptionText");
-          }}
-        >
-          {selectedElement === "subscriptionText" ? (
-            <textarea
-              value={block.subscriptionText.content}
-              onChange={(e) =>
-                handleFieldChange("subscriptionText", "content", e.target.value)
-              }
-              autoFocus
-              className="w-full border border-valasys-orange rounded px-2 py-1 text-center"
-              style={{
-                fontSize: `${block.subscriptionText.fontSize}px`,
-                fontWeight: block.subscriptionText.fontWeight,
-                color: block.subscriptionText.fontColor,
-              }}
-              rows={2}
-            />
-          ) : (
-            <p
-              style={{
-                fontSize: `${block.subscriptionText.fontSize}px`,
-                fontWeight: block.subscriptionText.fontWeight,
-                color: block.subscriptionText.fontColor,
-                fontFamily: block.subscriptionText.fontFamily,
-                fontStyle: block.subscriptionText.fontStyle,
-                margin: 0,
-                padding: `${block.subscriptionText.padding}px`,
-              }}
-            >
-              {block.subscriptionText.content}
-            </p>
-          )}
-        </div>
-
-        {/* Unsubscribe Link */}
-        <div
-          className={`cursor-pointer hover:bg-gray-50 rounded p-2 transition-all ${
-            selectedElement === "unsubscribeLink"
-              ? "ring-2 ring-valasys-orange"
-              : ""
-          }`}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleElementSelect("unsubscribeLink");
-          }}
-        >
-          {selectedElement === "unsubscribeLink" ? (
-            <div className="space-y-2">
+        {block.enterpriseName.content && (
+          <div
+            className={`cursor-pointer rounded p-2 transition-all relative ${
+              selectedElement === "enterpriseName"
+                ? "ring-2 ring-valasys-orange"
+                : ""
+            }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleElementSelect("enterpriseName");
+            }}
+          >
+            {selectedElement === "enterpriseName" ? (
               <input
                 type="text"
-                value={block.unsubscribeLink.text}
+                value={block.enterpriseName.content}
                 onChange={(e) =>
-                  handleFieldChange("unsubscribeLink", "text", e.target.value)
+                  handleFieldChange("enterpriseName", "content", e.target.value)
                 }
-                placeholder="Link text"
-                className="w-full border border-valasys-orange rounded px-2 py-1 text-sm"
+                autoFocus
+                className="w-full border border-valasys-orange rounded px-2 py-1 text-center"
+                style={{
+                  fontSize: `${block.enterpriseName.fontSize}px`,
+                  fontWeight: block.enterpriseName.fontWeight,
+                  color: block.enterpriseName.fontColor,
+                }}
               />
-              <input
-                type="url"
-                value={block.unsubscribeLink.url}
+            ) : (
+              <h3
+                style={{
+                  fontSize: `${block.enterpriseName.fontSize}px`,
+                  fontWeight: block.enterpriseName.fontWeight,
+                  color: block.enterpriseName.fontColor,
+                  fontFamily: block.enterpriseName.fontFamily,
+                  fontStyle: block.enterpriseName.fontStyle,
+                  margin: 0,
+                  padding: `${block.enterpriseName.padding}px`,
+                }}
+              >
+                {block.enterpriseName.content}
+              </h3>
+            )}
+            {selectedElement === "enterpriseName" && (
+              <div className="flex gap-1 justify-center mt-2">
+                <button
+                  onClick={(e) => handleCopySection("enterpriseName", e)}
+                  title="Copy section"
+                  className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={(e) => handleDeleteSection("enterpriseName", e)}
+                  title="Delete section"
+                  className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Address */}
+        {block.address.content && (
+          <div
+            className={`cursor-pointer rounded p-2 transition-all relative ${
+              selectedElement === "address"
+                ? "ring-2 ring-valasys-orange"
+                : ""
+            }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleElementSelect("address");
+            }}
+          >
+            {selectedElement === "address" ? (
+              <textarea
+                value={block.address.content}
                 onChange={(e) =>
-                  handleFieldChange("unsubscribeLink", "url", e.target.value)
+                  handleFieldChange("address", "content", e.target.value)
                 }
-                placeholder="https://"
-                className="w-full border border-valasys-orange rounded px-2 py-1 text-sm"
+                autoFocus
+                className="w-full border border-valasys-orange rounded px-2 py-1 text-center"
+                style={{
+                  fontSize: `${block.address.fontSize}px`,
+                  fontWeight: block.address.fontWeight,
+                  color: block.address.fontColor,
+                }}
+                rows={2}
               />
-            </div>
-          ) : (
-            <a
-              href={block.unsubscribeLink.url}
-              style={{
-                fontSize: `${block.unsubscribeLink.fontSize}px`,
-                fontWeight: block.unsubscribeLink.fontWeight,
-                color: block.unsubscribeLink.fontColor,
-                fontFamily: block.unsubscribeLink.fontFamily,
-                fontStyle: block.unsubscribeLink.fontStyle,
-                padding: `${block.unsubscribeLink.padding}px`,
-                textDecoration: block.unsubscribeLink.textDecoration,
-              }}
-            >
-              {block.unsubscribeLink.text}
-            </a>
-          )}
-        </div>
+            ) : (
+              <p
+                style={{
+                  fontSize: `${block.address.fontSize}px`,
+                  fontWeight: block.address.fontWeight,
+                  color: block.address.fontColor,
+                  fontFamily: block.address.fontFamily,
+                  fontStyle: block.address.fontStyle,
+                  margin: 0,
+                  padding: `${block.address.padding}px`,
+                  lineHeight: "1.6",
+                }}
+              >
+                {block.address.content}
+              </p>
+            )}
+            {selectedElement === "address" && (
+              <div className="flex gap-1 justify-center mt-2">
+                <button
+                  onClick={(e) => handleCopySection("address", e)}
+                  title="Copy section"
+                  className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={(e) => handleDeleteSection("address", e)}
+                  title="Delete section"
+                  className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Subscription Text */}
+        {block.subscriptionText.content && (
+          <div
+            className={`cursor-pointer rounded p-2 transition-all relative ${
+              selectedElement === "subscriptionText"
+                ? "ring-2 ring-valasys-orange"
+                : ""
+            }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleElementSelect("subscriptionText");
+            }}
+          >
+            {selectedElement === "subscriptionText" ? (
+              <textarea
+                value={block.subscriptionText.content}
+                onChange={(e) =>
+                  handleFieldChange("subscriptionText", "content", e.target.value)
+                }
+                autoFocus
+                className="w-full border border-valasys-orange rounded px-2 py-1 text-center"
+                style={{
+                  fontSize: `${block.subscriptionText.fontSize}px`,
+                  fontWeight: block.subscriptionText.fontWeight,
+                  color: block.subscriptionText.fontColor,
+                }}
+                rows={2}
+              />
+            ) : (
+              <p
+                style={{
+                  fontSize: `${block.subscriptionText.fontSize}px`,
+                  fontWeight: block.subscriptionText.fontWeight,
+                  color: block.subscriptionText.fontColor,
+                  fontFamily: block.subscriptionText.fontFamily,
+                  fontStyle: block.subscriptionText.fontStyle,
+                  margin: 0,
+                  padding: `${block.subscriptionText.padding}px`,
+                }}
+              >
+                {block.subscriptionText.content}
+              </p>
+            )}
+            {selectedElement === "subscriptionText" && (
+              <div className="flex gap-1 justify-center mt-2">
+                <button
+                  onClick={(e) => handleCopySection("subscriptionText", e)}
+                  title="Copy section"
+                  className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={(e) => handleDeleteSection("subscriptionText", e)}
+                  title="Delete section"
+                  className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Unsubscribe Link */}
+        {block.unsubscribeLink.text && (
+          <div
+            className={`cursor-pointer rounded p-2 transition-all relative ${
+              selectedElement === "unsubscribeLink"
+                ? "ring-2 ring-valasys-orange"
+                : ""
+            }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleElementSelect("unsubscribeLink");
+            }}
+          >
+            {selectedElement === "unsubscribeLink" ? (
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={block.unsubscribeLink.text}
+                  onChange={(e) =>
+                    handleFieldChange("unsubscribeLink", "text", e.target.value)
+                  }
+                  placeholder="Link text"
+                  className="w-full border border-valasys-orange rounded px-2 py-1 text-sm"
+                />
+                <input
+                  type="url"
+                  value={block.unsubscribeLink.url}
+                  onChange={(e) =>
+                    handleFieldChange("unsubscribeLink", "url", e.target.value)
+                  }
+                  placeholder="https://"
+                  className="w-full border border-valasys-orange rounded px-2 py-1 text-sm"
+                />
+              </div>
+            ) : (
+              <a
+                href={block.unsubscribeLink.url}
+                style={{
+                  fontSize: `${block.unsubscribeLink.fontSize}px`,
+                  fontWeight: block.unsubscribeLink.fontWeight,
+                  color: block.unsubscribeLink.fontColor,
+                  fontFamily: block.unsubscribeLink.fontFamily,
+                  fontStyle: block.unsubscribeLink.fontStyle,
+                  padding: `${block.unsubscribeLink.padding}px`,
+                  textDecoration: block.unsubscribeLink.textDecoration,
+                }}
+              >
+                {block.unsubscribeLink.text}
+              </a>
+            )}
+            {selectedElement === "unsubscribeLink" && (
+              <div className="flex gap-1 justify-center mt-2">
+                <button
+                  onClick={(e) => handleCopySection("unsubscribeLink", e)}
+                  title="Copy section"
+                  className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={(e) => handleDeleteSection("unsubscribeLink", e)}
+                  title="Delete section"
+                  className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </footer>
   );
