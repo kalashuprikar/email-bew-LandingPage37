@@ -27,6 +27,8 @@ export const NavigationBlockComponent: React.FC<
           justifyContent: block.alignment === "left" ? "flex-start" : block.alignment === "right" ? "flex-end" : "center",
           gap: "20px",
           width: "100%",
+          backgroundColor: block.backgroundColor,
+          borderRadius: "4px",
         }}
       >
         {block.items.map((item) => (
