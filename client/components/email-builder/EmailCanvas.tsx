@@ -203,7 +203,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                       style={{
                         display: "flex",
                         flexDirection: flexDirection,
-                        alignItems: alignItems,
+                        alignItems: "center",
                         justifyContent: justifyContent,
                         gap: "0",
                         flexWrap: "nowrap",

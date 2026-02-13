@@ -23,7 +23,7 @@ export const LogoBlockComponent: React.FC<LogoBlockComponentProps> = ({
         padding: `${(block as any).padding || 16}px`,
         display: isInlineDisplay ? (block.alignment === "center" ? "block" : "inline-block") : "block",
         width: isInlineDisplay ? (block.alignment === "center" ? "100%" : "auto") : "100%",
-        verticalAlign: "top",
+        verticalAlign: "middle",
       }}
     >
       <div style={{ textAlign: block.alignment === "center" ? "center" : block.alignment === "right" ? "right" : "left" }}>
