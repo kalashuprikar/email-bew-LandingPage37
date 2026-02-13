@@ -187,7 +187,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                   return (
                     <div
                       key={groupId}
-                      className="relative"
+                      className="relative w-full block"
                       onMouseEnter={() => setHoveredInlineGroup(groupId)}
                       onMouseLeave={() => setHoveredInlineGroup(null)}
                       onClick={(e) => {
