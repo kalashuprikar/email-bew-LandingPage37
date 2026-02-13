@@ -21,9 +21,7 @@ export const LogoBlockComponent: React.FC<LogoBlockComponentProps> = ({
       }`}
       style={{
         padding: `${(block as any).padding || 16}px`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        display: isInlineDisplay ? "inline-block" : "block",
         width: "auto",
         verticalAlign: "middle",
       }}
