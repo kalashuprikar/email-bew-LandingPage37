@@ -73,7 +73,8 @@ export const EmailPreview: React.FC<EmailPreviewProps> = ({ template }) => {
             return `<div style="flex: 0 0 auto;">${blockHtml}</div>`;
           })
           .join("");
-        return `<div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; width: 100%; margin: 0 auto;">${inlineHtml}</div>`;
+        const justifyValue = device === "mobile" ? "center" : "space-between";
+        return `<div style="display: flex; flex-direction: row; align-items: center; justify-content: ${justifyValue}; gap: 24px; width: 100%; margin: 0 auto; flex-wrap: wrap;">${inlineHtml}</div>`;
       }
       return renderBlockToHTML(item);
     })
