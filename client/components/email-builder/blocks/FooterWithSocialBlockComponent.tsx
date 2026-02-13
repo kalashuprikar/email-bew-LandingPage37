@@ -116,10 +116,14 @@ export const FooterWithSocialBlockComponent: React.FC<
               e.stopPropagation();
               handleElementSelect("social");
             }}
+            onMouseEnter={() => setHoveredSection("social")}
+            onMouseLeave={() => setHoveredSection(null)}
             className={`py-4 px-2 cursor-pointer rounded transition-all relative ${
               selectedElement === "social"
-                ? "ring-2 ring-valasys-orange"
-                : ""
+                ? "ring-2 ring-valasys-orange bg-orange-50"
+                : hoveredSection === "social"
+                  ? "border-2 border-dashed border-valasys-orange"
+                  : ""
             }`}
             style={{
               width:
@@ -184,18 +188,18 @@ export const FooterWithSocialBlockComponent: React.FC<
               })}
             </div>
             {selectedElement === "social" && (
-              <div className="flex gap-1 justify-center mt-2">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-lg">
                 <button
                   onClick={(e) => handleCopySection("social", e)}
                   title="Copy section"
-                  className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                  className="p-1.5 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
                 >
                   <Copy className="w-4 h-4" />
                 </button>
                 <button
                   onClick={(e) => handleDeleteSection("social", e)}
                   title="Delete section"
-                  className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                  className="p-1.5 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -209,9 +213,13 @@ export const FooterWithSocialBlockComponent: React.FC<
           <div
             className={`cursor-pointer rounded p-2 transition-all relative ${
               selectedElement === "enterpriseName"
-                ? "ring-2 ring-valasys-orange"
-                : ""
+                ? "ring-2 ring-valasys-orange bg-orange-50"
+                : hoveredSection === "enterpriseName"
+                  ? "border-2 border-dashed border-valasys-orange"
+                  : ""
             }`}
+            onMouseEnter={() => setHoveredSection("enterpriseName")}
+            onMouseLeave={() => setHoveredSection(null)}
             onClick={(e) => {
               e.stopPropagation();
               handleElementSelect("enterpriseName");
@@ -248,18 +256,18 @@ export const FooterWithSocialBlockComponent: React.FC<
               </h3>
             )}
             {selectedElement === "enterpriseName" && (
-              <div className="flex gap-1 justify-center mt-2">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-lg">
                 <button
                   onClick={(e) => handleCopySection("enterpriseName", e)}
                   title="Copy section"
-                  className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                  className="p-1.5 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
                 >
                   <Copy className="w-4 h-4" />
                 </button>
                 <button
                   onClick={(e) => handleDeleteSection("enterpriseName", e)}
                   title="Delete section"
-                  className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                  className="p-1.5 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -273,9 +281,13 @@ export const FooterWithSocialBlockComponent: React.FC<
           <div
             className={`cursor-pointer rounded p-2 transition-all relative ${
               selectedElement === "address"
-                ? "ring-2 ring-valasys-orange"
-                : ""
+                ? "ring-2 ring-valasys-orange bg-orange-50"
+                : hoveredSection === "address"
+                  ? "border-2 border-dashed border-valasys-orange"
+                  : ""
             }`}
+            onMouseEnter={() => setHoveredSection("address")}
+            onMouseLeave={() => setHoveredSection(null)}
             onClick={(e) => {
               e.stopPropagation();
               handleElementSelect("address");
@@ -313,18 +325,18 @@ export const FooterWithSocialBlockComponent: React.FC<
               </p>
             )}
             {selectedElement === "address" && (
-              <div className="flex gap-1 justify-center mt-2">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-lg">
                 <button
                   onClick={(e) => handleCopySection("address", e)}
                   title="Copy section"
-                  className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                  className="p-1.5 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
                 >
                   <Copy className="w-4 h-4" />
                 </button>
                 <button
                   onClick={(e) => handleDeleteSection("address", e)}
                   title="Delete section"
-                  className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                  className="p-1.5 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -338,9 +350,13 @@ export const FooterWithSocialBlockComponent: React.FC<
           <div
             className={`cursor-pointer rounded p-2 transition-all relative ${
               selectedElement === "subscriptionText"
-                ? "ring-2 ring-valasys-orange"
-                : ""
+                ? "ring-2 ring-valasys-orange bg-orange-50"
+                : hoveredSection === "subscriptionText"
+                  ? "border-2 border-dashed border-valasys-orange"
+                  : ""
             }`}
+            onMouseEnter={() => setHoveredSection("subscriptionText")}
+            onMouseLeave={() => setHoveredSection(null)}
             onClick={(e) => {
               e.stopPropagation();
               handleElementSelect("subscriptionText");
@@ -377,18 +393,18 @@ export const FooterWithSocialBlockComponent: React.FC<
               </p>
             )}
             {selectedElement === "subscriptionText" && (
-              <div className="flex gap-1 justify-center mt-2">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-lg">
                 <button
                   onClick={(e) => handleCopySection("subscriptionText", e)}
                   title="Copy section"
-                  className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                  className="p-1.5 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
                 >
                   <Copy className="w-4 h-4" />
                 </button>
                 <button
                   onClick={(e) => handleDeleteSection("subscriptionText", e)}
                   title="Delete section"
-                  className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                  className="p-1.5 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -402,9 +418,13 @@ export const FooterWithSocialBlockComponent: React.FC<
           <div
             className={`cursor-pointer rounded p-2 transition-all relative ${
               selectedElement === "unsubscribeLink"
-                ? "ring-2 ring-valasys-orange"
-                : ""
+                ? "ring-2 ring-valasys-orange bg-orange-50"
+                : hoveredSection === "unsubscribeLink"
+                  ? "border-2 border-dashed border-valasys-orange"
+                  : ""
             }`}
+            onMouseEnter={() => setHoveredSection("unsubscribeLink")}
+            onMouseLeave={() => setHoveredSection(null)}
             onClick={(e) => {
               e.stopPropagation();
               handleElementSelect("unsubscribeLink");
@@ -448,18 +468,18 @@ export const FooterWithSocialBlockComponent: React.FC<
               </a>
             )}
             {selectedElement === "unsubscribeLink" && (
-              <div className="flex gap-1 justify-center mt-2">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-lg">
                 <button
                   onClick={(e) => handleCopySection("unsubscribeLink", e)}
                   title="Copy section"
-                  className="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                  className="p-1.5 text-gray-700 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
                 >
                   <Copy className="w-4 h-4" />
                 </button>
                 <button
                   onClick={(e) => handleDeleteSection("unsubscribeLink", e)}
                   title="Delete section"
-                  className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                  className="p-1.5 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
