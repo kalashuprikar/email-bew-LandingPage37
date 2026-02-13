@@ -204,10 +204,8 @@ export const TwoColumnCardBlockComponent: React.FC<
   const handleDeleteButton = (cardId: string) => {
     const updatedCards = block.cards.map((card) => {
       if (card.id === cardId) {
-        return {
-          ...card,
-          button: undefined,
-        };
+        const { button, ...cardWithoutButton } = card;
+        return cardWithoutButton;
       }
       return card;
     });
