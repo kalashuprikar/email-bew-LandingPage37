@@ -199,7 +199,7 @@ export const FooterWithSocialBlockComponent: React.FC<
               })}
             </div>
             {selectedElement === "social" && (
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-lg">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white rounded-full px-2 py-1 shadow-lg">
                 <button
                   onClick={(e) => handleCopySection("social", e)}
                   title="Copy section"
@@ -267,7 +267,7 @@ export const FooterWithSocialBlockComponent: React.FC<
               </h3>
             )}
             {selectedElement === "enterpriseName" && (
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-lg">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white rounded-full px-2 py-1 shadow-lg">
                 <button
                   onClick={(e) => handleCopySection("enterpriseName", e)}
                   title="Copy section"
@@ -336,7 +336,7 @@ export const FooterWithSocialBlockComponent: React.FC<
               </p>
             )}
             {selectedElement === "address" && (
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-lg">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white rounded-full px-2 py-1 shadow-lg">
                 <button
                   onClick={(e) => handleCopySection("address", e)}
                   title="Copy section"
@@ -404,7 +404,7 @@ export const FooterWithSocialBlockComponent: React.FC<
               </p>
             )}
             {selectedElement === "subscriptionText" && (
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-lg">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white rounded-full px-2 py-1 shadow-lg">
                 <button
                   onClick={(e) => handleCopySection("subscriptionText", e)}
                   title="Copy section"
@@ -479,7 +479,7 @@ export const FooterWithSocialBlockComponent: React.FC<
               </a>
             )}
             {selectedElement === "unsubscribeLink" && (
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-lg">
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-white rounded-full px-2 py-1 shadow-lg">
                 <button
                   onClick={(e) => handleCopySection("unsubscribeLink", e)}
                   title="Copy section"
