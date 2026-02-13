@@ -26,6 +26,14 @@ interface CardDropZoneProps {
   onSelectBlock?: (blockId: string) => void;
 }
 
+interface CardDropZoneProps {
+  cardId: string;
+  blocks: ContentBlock[];
+  onAddBlock: (block: ContentBlock) => void;
+  onDeleteBlock: (blockId: string) => void;
+  onUpdateBlock?: (block: ContentBlock) => void;
+}
+
 const CardDropZone: React.FC<CardDropZoneProps> = ({
   cardId,
   blocks,
@@ -37,17 +45,17 @@ const CardDropZone: React.FC<CardDropZoneProps> = ({
     () => ({
       accept: ["block", "template"],
       drop: (item: any) => {
-        // Stop propagation to parent drop zones
         if (item.blocks) {
-          // Template - add all blocks
           item.blocks.forEach((block: ContentBlock) => {
             onAddBlock(block);
           });
         } else if (item.block) {
-          // Single block - clone it so it doesn't affect original
-          onAddBlock({ ...item.block, id: `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` });
+          onAddBlock({
+            ...item.block,
+            id: `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          });
         }
-        return { handled: true }; // Signal that drop was handled
+        return { handled: true };
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -62,20 +70,13 @@ const CardDropZone: React.FC<CardDropZoneProps> = ({
   return (
     <div
       ref={ref}
-      className="mt-3 pt-2 border-t border-gray-200 relative z-50 pointer-events-auto"
+      className="mt-3 pt-2 border-t border-gray-200 relative z-50"
       onClick={(e) => e.stopPropagation()}
-      onDragOver={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
     >
       {blocks && blocks.length > 0 ? (
         <div className="space-y-3 mt-2">
           {blocks.map((block) => (
-            <div
-              key={block.id}
-              className="relative group"
-            >
+            <div key={block.id} className="relative group">
               <BlockRenderer
                 block={block}
                 isSelected={false}
@@ -90,18 +91,86 @@ const CardDropZone: React.FC<CardDropZoneProps> = ({
         </div>
       ) : (
         <div
-          className={`text-center py-6 border-2 border-dashed rounded transition-colors pointer-events-auto ${
+          className={`text-center py-6 border-2 border-dashed rounded transition-colors ${
             isOver
               ? "border-valasys-orange bg-orange-50"
               : "border-gray-300 bg-gray-50"
           }`}
-          onClick={(e) => e.stopPropagation()}
         >
           <p className="text-xs text-gray-500">
             {isOver ? "Drop block here" : "Drag blocks here to add to card"}
           </p>
         </div>
       )}
+    </div>
+  );
+};
+
+// Wrapper component that makes the entire card content droppable
+const DroppableCardContent: React.FC<any> = (props) => {
+  const {
+    card,
+    cardPadding,
+    textColor,
+    titles,
+    descriptions,
+    children,
+    onAddBlock,
+    onDeleteBlock,
+    onUpdateBlock,
+  } = props;
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [{ isOver }, drop] = useDrop(
+    () => ({
+      accept: ["block", "template"],
+      drop: (item: any, monitor) => {
+        if (item.blocks) {
+          item.blocks.forEach((block: ContentBlock) => {
+            onAddBlock(block);
+          });
+        } else if (item.block) {
+          onAddBlock({
+            ...item.block,
+            id: `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          });
+        }
+        return { handled: true };
+      },
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+      }),
+    }),
+    []
+  );
+
+  drop(contentRef);
+
+  return (
+    <div
+      ref={contentRef}
+      className={`flex-1 overflow-visible flex flex-col relative z-20 transition-colors ${
+        isOver ? "bg-orange-50 border-2 border-dashed border-valasys-orange" : "bg-white"
+      }`}
+      style={{
+        padding: `${cardPadding}px`,
+        color: textColor,
+        margin: 0,
+        border: isOver ? undefined : "none",
+        minHeight: "150px",
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      {isOver && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-40">
+          <p className="text-sm text-valasys-orange font-bold bg-white px-3 py-1 rounded">
+            Drop block here
+          </p>
+        </div>
+      )}
+      {children}
     </div>
   );
 };
@@ -647,7 +716,7 @@ export const TwoColumnCardBlockComponent: React.FC<
                 )}
               </div>
 
-              {/* Content Section */}
+              {/* Content Section - Droppable */}
               <div
                 className="flex-1 overflow-visible flex flex-col"
                 style={{
@@ -657,6 +726,7 @@ export const TwoColumnCardBlockComponent: React.FC<
                   border: "none",
                 }}
               >
+
                 {/* Titles */}
                 <div className="space-y-2 mb-2">
                   {titles.map((title) => (
@@ -874,7 +944,7 @@ export const TwoColumnCardBlockComponent: React.FC<
                   </div>
                 )}
 
-                {/* Nested Blocks Drop Zone */}
+                {/* Nested Blocks Drop Zone - Accept blocks for this card */}
                 <CardDropZone
                   cardId={card.id}
                   blocks={card.blocks || []}
