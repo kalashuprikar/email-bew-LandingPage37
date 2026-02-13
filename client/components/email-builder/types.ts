@@ -507,7 +507,7 @@ export interface TwoColumnCardBlock {
       textColor: string;
       borderRadius: number;
       padding: number;
-    };
+    } | null;
     backgroundColor: string;
     textColor: string;
     borderRadius: number;

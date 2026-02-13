@@ -204,8 +204,10 @@ export const TwoColumnCardBlockComponent: React.FC<
   const handleDeleteButton = (cardId: string) => {
     const updatedCards = block.cards.map((card) => {
       if (card.id === cardId) {
-        const { button, ...cardWithoutButton } = card;
-        return cardWithoutButton;
+        return {
+          ...card,
+          button: null,
+        } as any;
       }
       return card;
     });
@@ -674,7 +676,7 @@ export const TwoColumnCardBlockComponent: React.FC<
                 </div>
 
                 {/* Button */}
-                {card.button ? (
+                {card.button && card.button.text ? (
                   <div className="flex flex-col gap-2 mt-3 pt-2 border-t border-gray-200">
                     <button
                       style={{
@@ -726,6 +728,7 @@ export const TwoColumnCardBlockComponent: React.FC<
                             e.stopPropagation();
                             handleDeleteButton(card.id);
                             setFocusedFieldId(null);
+                            setEditingButtonCardId(null);
                           }}
                         >
                           <Trash2 className="w-3 h-3 text-red-600" />
