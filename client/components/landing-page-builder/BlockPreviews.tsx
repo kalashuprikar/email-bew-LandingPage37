@@ -295,7 +295,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
                 }
               }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full text-2xl md:text-5xl font-bold text-gray-900 border-2 border-valasys-orange rounded px-2 py-1 focus:outline-none"
+              className="w-full text-2xl md:text-5xl font-bold text-gray-900 px-2 py-1 focus:outline-none bg-transparent"
               autoFocus
             />
           ) : (
@@ -411,7 +411,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
                 }
               }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full text-sm md:text-xl text-gray-600 border-2 border-valasys-orange rounded px-2 py-1 focus:outline-none"
+              className="w-full text-sm md:text-xl text-gray-600 px-2 py-1 focus:outline-none bg-transparent"
               autoFocus
             />
           ) : (
@@ -527,7 +527,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
                 }
               }}
               onClick={(e) => e.stopPropagation()}
-              className="px-6 md:px-8 py-2 md:py-3 border-2 border-valasys-orange rounded focus:outline-none text-sm md:text-base"
+              className="px-6 md:px-8 py-2 md:py-3 rounded focus:outline-none text-sm md:text-base"
               style={{ backgroundColor: props.ctaButtonColor || "#FF6A00", color: "white" }}
               autoFocus
             />
