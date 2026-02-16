@@ -41,9 +41,13 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`bg-white border border-gray-200 cursor-pointer transition-all ${
+      className={`border border-gray-200 cursor-pointer transition-all ${
         isSelected ? "border-orange-300" : "hover:border-gray-300"
       }`}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        width: props.width || "100%",
+      }}
     >
       <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center gap-3">
@@ -179,8 +183,9 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{
-        backgroundColor: props.backgroundColor,
+        backgroundColor: props.backgroundColor || "#f3f4f6",
         minHeight: props.minHeight || "500px",
+        width: props.width || "100%",
       }}
     >
       <div className="flex flex-col items-center justify-center h-full px-4 md:px-8 py-8 md:py-16 text-center">
@@ -226,7 +231,10 @@ export const FeaturesBlockPreview: React.FC<BlockPreviewProps> = ({
       className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        width: props.width || "100%",
+      }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-2">
@@ -267,7 +275,10 @@ export const TestimonialsBlockPreview: React.FC<BlockPreviewProps> = ({
       className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        width: props.width || "100%",
+      }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">
@@ -306,7 +317,10 @@ export const AboutBlockPreview: React.FC<BlockPreviewProps> = ({
       className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        width: props.width || "100%",
+      }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
@@ -349,7 +363,10 @@ export const ContactFormBlockPreview: React.FC<BlockPreviewProps> = ({
       className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        width: props.width || "100%",
+      }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16 max-w-2xl mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
@@ -413,8 +430,9 @@ export const FooterBlockPreview: React.FC<BlockPreviewProps> = ({
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{
-        backgroundColor: props.backgroundColor,
+        backgroundColor: props.backgroundColor || "#1f2937",
         color: props.textColor,
+        width: props.width || "100%",
       }}
     >
       <div className="px-4 md:px-8 py-8 md:py-12">
@@ -506,7 +524,10 @@ export const PricingBlockPreview: React.FC<BlockPreviewProps> = ({
       className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        width: props.width || "100%",
+      }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-2">
@@ -568,7 +589,10 @@ export const FaqBlockPreview: React.FC<BlockPreviewProps> = ({
       className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        width: props.width || "100%",
+      }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16 max-w-3xl mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">
@@ -607,7 +631,10 @@ export const SignupBlockPreview: React.FC<BlockPreviewProps> = ({
       className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        width: props.width || "100%",
+      }}
     >
       <div className="px-4 md:px-8 py-8 md:py-16 max-w-2xl mx-auto text-center">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
@@ -647,7 +674,10 @@ export const PricingFooterBlockPreview: React.FC<BlockPreviewProps> = ({
       className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        width: props.width || "100%",
+      }}
     >
       <div className="px-4 md:px-8 py-8 md:py-12">
         <div

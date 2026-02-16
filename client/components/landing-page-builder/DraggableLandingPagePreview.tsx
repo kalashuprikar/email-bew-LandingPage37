@@ -201,13 +201,13 @@ const DragItem: React.FC<{
     <div
       ref={ref}
       data-handler-id={handlerId}
-      className={`relative transition-all rounded cursor-pointer group mb-6 ${
+      className={`relative transition-all rounded cursor-pointer group mb-8 ${
         isDragging ? "opacity-50" : ""
       } ${
         isSelected
-          ? "border-[0.5px] border-solid border-orange-300"
+          ? "border-2 border-solid border-valasys-orange shadow-lg shadow-orange-200"
           : isHovered
-            ? "border border-dashed border-orange-300"
+            ? "border-2 border-dashed border-valasys-orange"
             : ""
       }`}
       onMouseEnter={() => setIsHovered(true)}
@@ -217,11 +217,11 @@ const DragItem: React.FC<{
 
       {isSelected && (
         <>
-          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 bg-white rounded-full shadow-lg border border-orange-300 p-2 z-50">
+          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg shadow-xl border border-valasys-orange p-3 z-50">
           <Button
             size="sm"
             variant="ghost"
-            className="h-8 w-8 p-0 hover:bg-gray-100"
+            className="h-9 w-9 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors"
             onMouseDown={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
             title="Duplicate block"
@@ -230,22 +230,20 @@ const DragItem: React.FC<{
               if (onDuplicate) onDuplicate();
             }}
           >
-            <Copy className="w-4 h-4 text-gray-600" />
+            <Copy className="w-4 h-4" />
           </Button>
-
-          <div className="w-px bg-gray-300"></div>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 size="sm"
                 variant="ghost"
-                className="h-8 w-8 p-0 hover:bg-gray-100"
+                className="h-9 w-9 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors"
                 onMouseDown={(e) => e.stopPropagation()}
                 onPointerDown={(e) => e.stopPropagation()}
                 title="Add block below"
               >
-                <Plus className="w-4 h-4 text-valasys-orange" />
+                <Plus className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="center">
@@ -294,12 +292,10 @@ const DragItem: React.FC<{
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <div className="w-px bg-gray-300"></div>
-
           <Button
             size="sm"
             variant="ghost"
-            className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
+            className="h-9 w-9 p-0 hover:bg-red-50 hover:text-red-600 transition-colors"
             onMouseDown={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
             title="Delete block"
