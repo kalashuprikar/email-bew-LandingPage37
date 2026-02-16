@@ -20,11 +20,20 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
   const props = block.properties;
   const [hoveredLinkIndex, setHoveredLinkIndex] = React.useState<number | null>(null);
   const [selectedNavLinkIndex, setSelectedNavLinkIndex] = React.useState<number | null>(null);
+  const [isEditingLogoText, setIsEditingLogoText] = React.useState(false);
+  const [editLogoText, setEditLogoText] = React.useState(props.logoText || "");
 
   const handleLinkUpdate = (index: number, label: string, href: string) => {
     const updated = [...(props.navigationLinks || [])];
     updated[index] = { label, href };
     onUpdate({ ...props, navigationLinks: updated });
+  };
+
+  const handleLogoTextSave = () => {
+    if (editLogoText.trim()) {
+      onUpdate({ ...props, logoText: editLogoText });
+    }
+    setIsEditingLogoText(false);
   };
 
   return (
@@ -43,7 +52,35 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
               className="h-8 object-contain"
             />
           )}
-          <div className="font-bold text-gray-900">{props.logoText}</div>
+          {isEditingLogoText ? (
+            <input
+              type="text"
+              value={editLogoText}
+              onChange={(e) => setEditLogoText(e.target.value)}
+              onBlur={handleLogoTextSave}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleLogoTextSave();
+                if (e.key === 'Escape') {
+                  setEditLogoText(props.logoText || "");
+                  setIsEditingLogoText(false);
+                }
+              }}
+              onClick={(e) => e.stopPropagation()}
+              className="font-bold text-gray-900 px-2 py-1 border border-orange-300 rounded focus:outline-none"
+              autoFocus
+            />
+          ) : (
+            <div
+              className="font-bold text-gray-900 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditLogoText(props.logoText || "");
+                setIsEditingLogoText(true);
+              }}
+            >
+              {props.logoText}
+            </div>
+          )}
         </div>
         <div className="flex gap-4 text-sm text-gray-600">
           {props.navigationLinks?.map((link: any, i: number) => (
