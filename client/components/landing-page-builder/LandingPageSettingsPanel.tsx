@@ -334,41 +334,36 @@ export const LandingPageSettingsPanel: React.FC<
         <div className="flex gap-2">
           <Input
             type="text"
-            value={parseInt(localProps.width) || 100}
+            value={String(localProps.width || "100%").replace(/[^0-9]/g, "")}
             onChange={(e) => {
-              const unit = (localProps.width || "100%").includes("%") ? "%" : "px";
+              const unit = String(localProps.width || "100%").includes("%") ? "%" : "px";
               const inputValue = e.target.value;
 
-              // Allow empty string for backspace
-              if (inputValue === "") {
-                updateProperty("width", `0${unit}`);
-                return;
+              // Only accept numeric input
+              const numericOnly = inputValue.replace(/[^0-9]/g, "");
+
+              if (numericOnly === "") {
+                return; // Don't save empty values
               }
 
-              // Only accept numbers
-              if (!/^\d+$/.test(inputValue)) {
-                return;
-              }
-
-              const num = parseInt(inputValue);
+              const num = parseInt(numericOnly, 10);
 
               // For percentage: only allow up to 100
               if (unit === "%") {
                 if (num > 100) {
-                  return; // Don't update if > 100 for %
+                  return;
                 }
               }
 
-              // For pixels: accept any value
               updateProperty("width", `${num}${unit}`);
             }}
             placeholder="100"
             className="flex-1"
           />
           <select
-            value={(localProps.width || "100%").includes("%") ? "%" : "px"}
+            value={String(localProps.width || "100%").includes("%") ? "%" : "px"}
             onChange={(e) => {
-              const currentNum = parseInt(localProps.width) || 100;
+              const currentNum = parseInt(String(localProps.width || "100").replace(/[^0-9]/g, ""), 10) || 100;
               const unit = e.target.value;
 
               // When switching TO percentage, cap at 100
@@ -376,7 +371,6 @@ export const LandingPageSettingsPanel: React.FC<
                 const cappedNum = Math.min(currentNum, 100);
                 updateProperty("width", `${cappedNum}${unit}`);
               } else {
-                // When switching TO pixels, keep the number as is
                 updateProperty("width", `${currentNum}${unit}`);
               }
             }}
@@ -393,22 +387,18 @@ export const LandingPageSettingsPanel: React.FC<
         <div className="flex gap-2">
           <Input
             type="text"
-            value={parseInt(localProps.minHeight) || 500}
+            value={String(localProps.minHeight || "500px").replace(/[^0-9]/g, "")}
             onChange={(e) => {
               const inputValue = e.target.value;
 
-              // Allow empty string for backspace
-              if (inputValue === "") {
-                updateProperty("minHeight", `0px`);
-                return;
+              // Only accept numeric input
+              const numericOnly = inputValue.replace(/[^0-9]/g, "");
+
+              if (numericOnly === "") {
+                return; // Don't save empty values
               }
 
-              // Only accept numbers
-              if (!/^\d+$/.test(inputValue)) {
-                return;
-              }
-
-              updateProperty("minHeight", `${inputValue}px`);
+              updateProperty("minHeight", `${numericOnly}px`);
             }}
             placeholder="500"
             className="flex-1"
