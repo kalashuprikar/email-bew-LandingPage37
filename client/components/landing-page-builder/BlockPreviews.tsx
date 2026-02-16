@@ -1,4 +1,5 @@
 import React from "react";
+import { Menu, X } from "lucide-react";
 import { LandingPageBlock } from "./types";
 import { EditableLink } from "./EditableLink";
 
@@ -22,6 +23,7 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
   const [selectedNavLinkIndex, setSelectedNavLinkIndex] = React.useState<number | null>(null);
   const [isEditingLogoText, setIsEditingLogoText] = React.useState(false);
   const [editLogoText, setEditLogoText] = React.useState(props.logoText || "");
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const handleLinkUpdate = (index: number, label: string, href: string) => {
     const updated = [...(props.navigationLinks || [])];
@@ -43,7 +45,7 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
         isSelected ? "border-orange-300" : "hover:border-gray-300"
       }`}
     >
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between px-4 md:px-6 py-4 border-b border-gray-200 bg-gray-50 gap-4 md:gap-0">
+      <div className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center gap-3">
           {props.logoUrl && (
             <img
@@ -82,7 +84,9 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
             </div>
           )}
         </div>
-        <div className="flex flex-wrap gap-2 md:gap-4 text-xs md:text-sm text-gray-600">
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex gap-4 text-sm text-gray-600 items-center">
           {props.navigationLinks?.map((link: any, i: number) => (
             <div
               key={i}
@@ -105,11 +109,53 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
               />
             </div>
           ))}
+          <button className="px-4 py-2 bg-valasys-orange text-white text-sm font-medium rounded hover:bg-orange-600 transition-colors whitespace-nowrap">
+            {props.ctaButtonText}
+          </button>
         </div>
-        <button className="px-4 py-2 bg-valasys-orange text-white text-xs md:text-sm font-medium rounded hover:bg-orange-600 transition-colors whitespace-nowrap">
-          {props.ctaButtonText}
-        </button>
+
+        {/* Mobile Hamburger Menu */}
+        <div className="md:hidden flex items-center gap-2">
+          <button className="px-3 py-2 bg-valasys-orange text-white text-xs font-medium rounded hover:bg-orange-600 transition-colors whitespace-nowrap">
+            {props.ctaButtonText}
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMenuOpen(!isMenuOpen);
+            }}
+            className="p-2 hover:bg-gray-200 rounded transition-colors"
+          >
+            {isMenuOpen ? (
+              <X className="w-5 h-5 text-gray-600" />
+            ) : (
+              <Menu className="w-5 h-5 text-gray-600" />
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-200">
+          <div className="flex flex-col px-4 py-2 space-y-2">
+            {props.navigationLinks?.map((link: any, i: number) => (
+              <div
+                key={i}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedNavLinkIndex(i);
+                  onLinkSelect?.(i, "navigation");
+                  setIsMenuOpen(false);
+                }}
+                className="py-2 px-2 hover:bg-gray-100 rounded text-sm text-gray-600 hover:text-gray-900 cursor-pointer transition-all"
+              >
+                {link.label}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
