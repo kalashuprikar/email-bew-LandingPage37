@@ -48,7 +48,7 @@ export const EditableLink: React.FC<EditableLinkProps> = ({
           if (e.key === 'Enter') handleSave();
           if (e.key === 'Escape') handleCancel();
         }}
-        className="text-xs px-3 py-2 border border-solid border-valasys-orange rounded-full bg-white focus:outline-none w-40 z-50"
+        className="text-xs px-3 py-2 border border-solid border-valasys-orange rounded-full bg-white focus:outline-none w-28 z-50"
         autoFocus
       />
     );
