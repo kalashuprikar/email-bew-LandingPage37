@@ -153,7 +153,7 @@ export const LandingPageSettingsPanel: React.FC<
   const renderHeaderBlockSettings = () => (
     <div className="space-y-4">
       <div>
-        <Label className="text-sm font-medium">Background Color</Label>
+        <Label className="text-sm font-medium block mb-2">Background Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -171,7 +171,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Width</Label>
+        <Label className="text-sm font-medium block mb-2">Width</Label>
         <Input
           value={localProps.width || "100%"}
           onChange={(e) => updateProperty("width", e.target.value)}
@@ -180,7 +180,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Logo Text</Label>
+        <Label className="text-sm font-medium block mb-2">Logo Text</Label>
         <Input
           value={localProps.logoText || ""}
           onChange={(e) => updateProperty("logoText", e.target.value)}
@@ -189,7 +189,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Logo Image URL</Label>
+        <Label className="text-sm font-medium block mb-2">Logo Image URL</Label>
         <Input
           value={localProps.logoUrl || ""}
           onChange={(e) => updateProperty("logoUrl", e.target.value)}
@@ -207,7 +207,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium mb-2 block">
+        <Label className="text-sm font-medium block mb-2">
           Navigation Links
         </Label>
         <div className="space-y-2">
@@ -277,7 +277,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">CTA Button Text</Label>
+        <Label className="text-sm font-medium block mb-2">CTA Button Text</Label>
         <Input
           value={localProps.ctaButtonText || ""}
           onChange={(e) => updateProperty("ctaButtonText", e.target.value)}
@@ -286,7 +286,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">CTA Button Link</Label>
+        <Label className="text-sm font-medium block mb-2">CTA Button Link</Label>
         <Input
           value={localProps.ctaButtonLink || ""}
           onChange={(e) => updateProperty("ctaButtonLink", e.target.value)}
@@ -299,7 +299,7 @@ export const LandingPageSettingsPanel: React.FC<
   const renderHeroBlockSettings = () => (
     <div className="space-y-4">
       <div>
-        <Label className="text-sm font-medium">Headline</Label>
+        <Label className="text-sm font-medium block mb-2">Headline</Label>
         <Input
           value={localProps.headline || ""}
           onChange={(e) => updateProperty("headline", e.target.value)}
@@ -308,7 +308,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Subheading</Label>
+        <Label className="text-sm font-medium block mb-2">Subheading</Label>
         <Input
           value={localProps.subheading || ""}
           onChange={(e) => updateProperty("subheading", e.target.value)}
@@ -317,7 +317,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Background Color</Label>
+        <Label className="text-sm font-medium block mb-2">Background Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -335,7 +335,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Width</Label>
+        <Label className="text-sm font-medium block mb-2">Width</Label>
         <div className="flex gap-2">
           <Input
             type="text"
@@ -388,7 +388,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Min Height</Label>
+        <Label className="text-sm font-medium block mb-2">Min Height</Label>
         <div className="flex gap-2">
           <Input
             type="text"
@@ -415,7 +415,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">CTA Button Text</Label>
+        <Label className="text-sm font-medium block mb-2">CTA Button Text</Label>
         <Input
           value={localProps.ctaButtonText || ""}
           onChange={(e) => updateProperty("ctaButtonText", e.target.value)}
@@ -424,7 +424,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">CTA Button Color</Label>
+        <Label className="text-sm font-medium block mb-2">CTA Button Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -442,7 +442,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Headline Text Color</Label>
+        <Label className="text-sm font-medium block mb-2">Headline Text Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -460,7 +460,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Subheading Text Color</Label>
+        <Label className="text-sm font-medium block mb-2">Subheading Text Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -478,7 +478,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Button Text Color</Label>
+        <Label className="text-sm font-medium block mb-2">Button Text Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -496,7 +496,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Background Image URL</Label>
+        <Label className="text-sm font-medium block mb-2">Background Image URL</Label>
         <Input
           value={localProps.backgroundImage || ""}
           onChange={(e) => updateProperty("backgroundImage", e.target.value)}
@@ -513,7 +513,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Overlay Opacity (0-100)</Label>
+        <Label className="text-sm font-medium block mb-2">Overlay Opacity (0-100)</Label>
         <Input
           type="number"
           min="0"
@@ -532,7 +532,7 @@ export const LandingPageSettingsPanel: React.FC<
   const renderFeaturesBlockSettings = () => (
     <div className="space-y-4">
       <div>
-        <Label className="text-sm font-medium">Heading</Label>
+        <Label className="text-sm font-medium block mb-2">Heading</Label>
         <Input
           value={localProps.heading || ""}
           onChange={(e) => updateProperty("heading", e.target.value)}
@@ -541,7 +541,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Description</Label>
+        <Label className="text-sm font-medium block mb-2">Description</Label>
         <Input
           value={localProps.description || ""}
           onChange={(e) => updateProperty("description", e.target.value)}
@@ -550,7 +550,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Background Color</Label>
+        <Label className="text-sm font-medium block mb-2">Background Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -568,7 +568,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Width</Label>
+        <Label className="text-sm font-medium block mb-2">Width</Label>
         <Input
           value={localProps.width || "100%"}
           onChange={(e) => updateProperty("width", e.target.value)}
@@ -577,7 +577,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Columns</Label>
+        <Label className="text-sm font-medium block mb-2">Columns</Label>
         <Input
           type="number"
           value={localProps.columns || 4}
@@ -594,7 +594,7 @@ export const LandingPageSettingsPanel: React.FC<
   const renderFooterBlockSettings = () => (
     <div className="space-y-4">
       <div>
-        <Label className="text-sm font-medium">Company Name</Label>
+        <Label className="text-sm font-medium block mb-2">Company Name</Label>
         <Input
           value={localProps.companyName || ""}
           onChange={(e) => updateProperty("companyName", e.target.value)}
@@ -603,7 +603,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Description</Label>
+        <Label className="text-sm font-medium block mb-2">Description</Label>
         <Input
           value={localProps.companyDescription || ""}
           onChange={(e) =>
@@ -614,7 +614,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Email</Label>
+        <Label className="text-sm font-medium block mb-2">Email</Label>
         <Input
           value={localProps.contactInfo?.email || ""}
           onChange={(e) =>
@@ -625,7 +625,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Phone</Label>
+        <Label className="text-sm font-medium block mb-2">Phone</Label>
         <Input
           value={localProps.contactInfo?.phone || ""}
           onChange={(e) =>
@@ -636,7 +636,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Background Color</Label>
+        <Label className="text-sm font-medium block mb-2">Background Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -654,7 +654,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Width</Label>
+        <Label className="text-sm font-medium block mb-2">Width</Label>
         <Input
           value={localProps.width || "100%"}
           onChange={(e) => updateProperty("width", e.target.value)}
@@ -663,7 +663,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Text Color</Label>
+        <Label className="text-sm font-medium block mb-2">Text Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -681,7 +681,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium mb-2 block">Quick Links</Label>
+        <Label className="text-sm font-medium block mb-2">Quick Links</Label>
         <div className="space-y-2">
           {localProps.quickLinks?.map((link: any, index: number) => (
             <div key={index} className="flex items-center gap-2">
@@ -751,7 +751,7 @@ export const LandingPageSettingsPanel: React.FC<
   const renderTestimonialsBlockSettings = () => (
     <div className="space-y-4">
       <div>
-        <Label className="text-sm font-medium">Heading</Label>
+        <Label className="text-sm font-medium block mb-2">Heading</Label>
         <Input
           value={localProps.heading || ""}
           onChange={(e) => updateProperty("heading", e.target.value)}
@@ -760,7 +760,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Background Color</Label>
+        <Label className="text-sm font-medium block mb-2">Background Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -778,7 +778,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Width</Label>
+        <Label className="text-sm font-medium block mb-2">Width</Label>
         <Input
           value={localProps.width || "100%"}
           onChange={(e) => updateProperty("width", e.target.value)}
@@ -791,7 +791,7 @@ export const LandingPageSettingsPanel: React.FC<
   const renderAboutBlockSettings = () => (
     <div className="space-y-4">
       <div>
-        <Label className="text-sm font-medium">Heading</Label>
+        <Label className="text-sm font-medium block mb-2">Heading</Label>
         <Input
           value={localProps.heading || ""}
           onChange={(e) => updateProperty("heading", e.target.value)}
@@ -800,7 +800,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Background Color</Label>
+        <Label className="text-sm font-medium block mb-2">Background Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -818,7 +818,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Width</Label>
+        <Label className="text-sm font-medium block mb-2">Width</Label>
         <Input
           value={localProps.width || "100%"}
           onChange={(e) => updateProperty("width", e.target.value)}
@@ -831,7 +831,7 @@ export const LandingPageSettingsPanel: React.FC<
   const renderDefaultSettings = () => (
     <div className="space-y-4">
       <div>
-        <Label className="text-sm font-medium">Background Color</Label>
+        <Label className="text-sm font-medium block mb-2">Background Color</Label>
         <div className="flex gap-2">
           <Input
             type="color"
@@ -849,7 +849,7 @@ export const LandingPageSettingsPanel: React.FC<
       </div>
 
       <div>
-        <Label className="text-sm font-medium">Width</Label>
+        <Label className="text-sm font-medium block mb-2">Width</Label>
         <Input
           value={localProps.width || "100%"}
           onChange={(e) => updateProperty("width", e.target.value)}
