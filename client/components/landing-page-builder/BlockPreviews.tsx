@@ -191,6 +191,14 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
   const [editButtonText, setEditButtonText] = React.useState(props.ctaButtonText || "");
   const [hoveredElement, setHoveredElement] = React.useState<"heading" | "subheading" | "button" | null | string>(null);
   const [selectedCopyElement, setSelectedCopyElement] = React.useState<string | null>(null);
+  const headingTextareaRef = React.useRef<HTMLTextAreaElement>(null);
+  const subheadingTextareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const adjustTextareaHeight = (textarea: HTMLTextAreaElement | null) => {
+    if (!textarea) return;
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  };
 
   // Element order management - default order is heading, subheading, button
   const elementOrder = props.elementOrder || ["heading", "subheading", "button"];
@@ -276,222 +284,253 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
     onElementSelect?.(null);
   };
 
-  const renderHeadingElement = () => (
-    <div
-      className={`relative mb-4 px-4 py-2 rounded transition-all cursor-move group ${
-        selectedElement === "heading" ? "border-2 border-solid border-valasys-orange" :
-        hoveredElement === "heading" ? "border-2 border-dashed border-valasys-orange" : ""
-      }`}
-      onMouseEnter={() => !isEditingHeading && setHoveredElement("heading")}
-      onMouseLeave={() => setHoveredElement(null)}
-      onClick={(e) => {
-        e.stopPropagation();
-        onElementSelect?.("heading");
-      }}
-    >
-      {isEditingHeading ? (
-        <input
-          type="text"
-          value={editHeadingText}
-          onChange={(e) => setEditHeadingText(e.target.value)}
-          onBlur={handleHeadlineSave}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleHeadlineSave();
-            if (e.key === "Escape") {
+  const renderHeadingElement = () => {
+    // Only render if heading has content or is being edited
+    if (!props.headline && !isEditingHeading) {
+      return null;
+    }
+
+    return (
+      <div
+        className={`relative mb-4 px-4 py-2 rounded transition-all cursor-move group w-full ${
+          selectedElement === "heading" ? "border-2 border-solid border-valasys-orange" :
+          hoveredElement === "heading" ? "border-2 border-dashed border-valasys-orange" : ""
+        }`}
+        onMouseEnter={() => !isEditingHeading && setHoveredElement("heading")}
+        onMouseLeave={() => setHoveredElement(null)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onElementSelect?.("heading");
+        }}
+      >
+        {isEditingHeading ? (
+          <textarea
+            ref={headingTextareaRef}
+            value={editHeadingText}
+            onChange={(e) => {
+              setEditHeadingText(e.target.value);
+              adjustTextareaHeight(headingTextareaRef.current);
+            }}
+            onBlur={handleHeadlineSave}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setEditHeadingText(props.headline || "");
+                setIsEditingHeading(false);
+              }
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full text-2xl md:text-5xl font-bold text-gray-900 px-2 py-1 focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words"
+            autoFocus
+            onFocus={(e) => {
+              setTimeout(() => adjustTextareaHeight(e.target as HTMLTextAreaElement), 0);
+            }}
+          />
+        ) : (
+          <h1
+            className="text-2xl md:text-5xl font-bold cursor-text break-words"
+            style={{ color: props.headlineColor || "#1f2937", wordBreak: "break-word" }}
+            onDoubleClick={(e) => {
+              e.stopPropagation();
               setEditHeadingText(props.headline || "");
-              setIsEditingHeading(false);
-            }
-          }}
-          onClick={(e) => e.stopPropagation()}
-          className="w-full text-2xl md:text-5xl font-bold text-gray-900 px-2 py-1 focus:outline-none bg-transparent"
-          autoFocus
-        />
-      ) : (
-        <h1
-          className="text-2xl md:text-5xl font-bold cursor-text"
-          style={{ color: props.headlineColor || "#1f2937" }}
-          onDoubleClick={(e) => {
-            e.stopPropagation();
-            setEditHeadingText(props.headline || "");
-            setIsEditingHeading(true);
-          }}
-        >
-          {props.headline}
-        </h1>
-      )}
-
-      {selectedElement === "heading" && (
-        <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
-          <button
-            className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
-            title="Copy heading"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCopyHeading();
+              setIsEditingHeading(true);
             }}
           >
-            <Copy className="w-4 h-4" />
-          </button>
-          <button
-            className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
-            title="Delete heading"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteHeading();
-            }}
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
-      )}
-    </div>
-  );
+            {props.headline}
+          </h1>
+        )}
 
-  const renderSubheadingElement = () => (
-    <div
-      className={`relative mb-8 px-4 py-2 rounded transition-all max-w-2xl cursor-move group ${
-        selectedElement === "subheading" ? "border-2 border-solid border-valasys-orange" :
-        hoveredElement === "subheading" ? "border-2 border-dashed border-valasys-orange" : ""
-      }`}
-      onMouseEnter={() => !isEditingSubheading && setHoveredElement("subheading")}
-      onMouseLeave={() => setHoveredElement(null)}
-      onClick={(e) => {
-        e.stopPropagation();
-        onElementSelect?.("subheading");
-      }}
-    >
-      {isEditingSubheading ? (
-        <input
-          type="text"
-          value={editSubheadingText}
-          onChange={(e) => setEditSubheadingText(e.target.value)}
-          onBlur={handleSubheadingSave}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSubheadingSave();
-            if (e.key === "Escape") {
+        {selectedElement === "heading" && (
+          <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
+            <button
+              className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
+              title="Copy heading"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCopyHeading();
+              }}
+            >
+              <Copy className="w-4 h-4" />
+            </button>
+            <button
+              className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
+              title="Delete heading"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteHeading();
+              }}
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderSubheadingElement = () => {
+    // Only render if subheading has content or is being edited
+    if (!props.subheading && !isEditingSubheading) {
+      return null;
+    }
+
+    return (
+      <div
+        className={`relative mb-8 px-4 py-2 rounded transition-all w-full cursor-move group ${
+          selectedElement === "subheading" ? "border-2 border-solid border-valasys-orange" :
+          hoveredElement === "subheading" ? "border-2 border-dashed border-valasys-orange" : ""
+        }`}
+        onMouseEnter={() => !isEditingSubheading && setHoveredElement("subheading")}
+        onMouseLeave={() => setHoveredElement(null)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onElementSelect?.("subheading");
+        }}
+      >
+        {isEditingSubheading ? (
+          <textarea
+            ref={subheadingTextareaRef}
+            value={editSubheadingText}
+            onChange={(e) => {
+              setEditSubheadingText(e.target.value);
+              adjustTextareaHeight(subheadingTextareaRef.current);
+            }}
+            onBlur={handleSubheadingSave}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setEditSubheadingText(props.subheading || "");
+                setIsEditingSubheading(false);
+              }
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full text-sm md:text-xl text-gray-600 px-2 py-1 focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words"
+            autoFocus
+            onFocus={(e) => {
+              setTimeout(() => adjustTextareaHeight(e.target as HTMLTextAreaElement), 0);
+            }}
+          />
+        ) : (
+          <p
+            className="text-sm md:text-xl cursor-text break-words"
+            style={{ color: props.subheadingColor || "#4b5563", wordBreak: "break-word" }}
+            onDoubleClick={(e) => {
+              e.stopPropagation();
               setEditSubheadingText(props.subheading || "");
-              setIsEditingSubheading(false);
-            }
-          }}
-          onClick={(e) => e.stopPropagation()}
-          className="w-full text-sm md:text-xl text-gray-600 px-2 py-1 focus:outline-none bg-transparent"
-          autoFocus
-        />
-      ) : (
-        <p
-          className="text-sm md:text-xl cursor-text"
-          style={{ color: props.subheadingColor || "#4b5563" }}
-          onDoubleClick={(e) => {
-            e.stopPropagation();
-            setEditSubheadingText(props.subheading || "");
-            setIsEditingSubheading(true);
-          }}
-        >
-          {props.subheading}
-        </p>
-      )}
-
-      {selectedElement === "subheading" && (
-        <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
-          <button
-            className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
-            title="Copy subheading"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCopySubheading();
+              setIsEditingSubheading(true);
             }}
           >
-            <Copy className="w-4 h-4" />
-          </button>
-          <button
-            className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
-            title="Delete subheading"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteSubheading();
-            }}
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
-      )}
-    </div>
-  );
+            {props.subheading}
+          </p>
+        )}
 
-  const renderButtonElement = () => (
-    <div
-      className={`relative px-4 py-2 rounded transition-all cursor-move group ${
-        selectedElement === "button" ? "border-2 border-solid border-valasys-orange" :
-        hoveredElement === "button" ? "border-2 border-dashed border-valasys-orange" : ""
-      }`}
-      onMouseEnter={() => !isEditingButton && setHoveredElement("button")}
-      onMouseLeave={() => setHoveredElement(null)}
-      onClick={(e) => {
-        e.stopPropagation();
-        onElementSelect?.("button");
-      }}
-    >
-      {isEditingButton ? (
-        <input
-          type="text"
-          value={editButtonText}
-          onChange={(e) => setEditButtonText(e.target.value)}
-          onBlur={handleButtonSave}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleButtonSave();
-            if (e.key === "Escape") {
+        {selectedElement === "subheading" && (
+          <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
+            <button
+              className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
+              title="Copy subheading"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCopySubheading();
+              }}
+            >
+              <Copy className="w-4 h-4" />
+            </button>
+            <button
+              className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
+              title="Delete subheading"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteSubheading();
+              }}
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderButtonElement = () => {
+    // Only render if button has content or is being edited
+    if (!props.ctaButtonText && !isEditingButton) {
+      return null;
+    }
+
+    return (
+      <div
+        className={`relative px-4 py-2 rounded transition-all cursor-move group ${
+          selectedElement === "button" ? "border-2 border-solid border-valasys-orange" :
+          hoveredElement === "button" ? "border-2 border-dashed border-valasys-orange" : ""
+        }`}
+        onMouseEnter={() => !isEditingButton && setHoveredElement("button")}
+        onMouseLeave={() => setHoveredElement(null)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onElementSelect?.("button");
+        }}
+      >
+        {isEditingButton ? (
+          <input
+            type="text"
+            value={editButtonText}
+            onChange={(e) => setEditButtonText(e.target.value)}
+            onBlur={handleButtonSave}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleButtonSave();
+              if (e.key === "Escape") {
+                setEditButtonText(props.ctaButtonText || "");
+                setIsEditingButton(false);
+              }
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="px-6 md:px-8 py-2 md:py-3 rounded focus:outline-none text-sm md:text-base"
+            style={{ backgroundColor: props.ctaButtonColor || "#FF6A00", color: "white" }}
+            autoFocus
+          />
+        ) : (
+          <button
+            style={{
+              backgroundColor: props.ctaButtonColor,
+              color: props.ctaButtonTextColor || "#ffffff"
+            }}
+            className="px-6 md:px-8 py-2 md:py-3 font-medium rounded hover:opacity-90 transition-opacity text-sm md:text-base cursor-text"
+            onDoubleClick={(e) => {
+              e.stopPropagation();
               setEditButtonText(props.ctaButtonText || "");
-              setIsEditingButton(false);
-            }
-          }}
-          onClick={(e) => e.stopPropagation()}
-          className="px-6 md:px-8 py-2 md:py-3 rounded focus:outline-none text-sm md:text-base"
-          style={{ backgroundColor: props.ctaButtonColor || "#FF6A00", color: "white" }}
-          autoFocus
-        />
-      ) : (
-        <button
-          style={{
-            backgroundColor: props.ctaButtonColor,
-            color: props.ctaButtonTextColor || "#ffffff"
-          }}
-          className="px-6 md:px-8 py-2 md:py-3 font-medium rounded hover:opacity-90 transition-opacity text-sm md:text-base cursor-text"
-          onDoubleClick={(e) => {
-            e.stopPropagation();
-            setEditButtonText(props.ctaButtonText || "");
-            setIsEditingButton(true);
-          }}
-        >
-          {props.ctaButtonText}
-        </button>
-      )}
+              setIsEditingButton(true);
+            }}
+          >
+            {props.ctaButtonText}
+          </button>
+        )}
 
-      {selectedElement === "button" && (
-        <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
-          <button
-            className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
-            title="Copy button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCopyButton();
-            }}
-          >
-            <Copy className="w-4 h-4" />
-          </button>
-          <button
-            className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
-            title="Delete button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteButton();
-            }}
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
-      )}
-    </div>
-  );
+        {selectedElement === "button" && (
+          <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg border border-valasys-orange p-2 z-50 mt-2">
+            <button
+              className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
+              title="Copy button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCopyButton();
+              }}
+            >
+              <Copy className="w-4 h-4" />
+            </button>
+            <button
+              className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
+              title="Delete button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteButton();
+              }}
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div
@@ -1169,6 +1208,376 @@ export const PricingFooterBlockPreview: React.FC<BlockPreviewProps> = ({
           ))}
         </div>
       </div>
+    </div>
+  );
+};
+
+export const HeadingBlockPreview: React.FC<BlockPreviewProps> = ({
+  block,
+  isSelected,
+  onSelect,
+  onUpdate,
+}) => {
+  const props = block.properties;
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editText, setEditText] = React.useState(props.text || "");
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const handleSave = () => {
+    if (editText.trim()) {
+      onUpdate({ ...props, text: editText });
+    }
+    setIsEditing(false);
+  };
+
+  const adjustHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`cursor-pointer transition-all border ${
+        isSelected ? "border-valasys-orange" : "border-gray-200"
+      }`}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        padding: props.padding || "20px",
+      }}
+    >
+      {isEditing ? (
+        <textarea
+          ref={textareaRef}
+          value={editText}
+          onChange={(e) => {
+            setEditText(e.target.value);
+            adjustHeight();
+          }}
+          onBlur={handleSave}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setEditText(props.text || "");
+              setIsEditing(false);
+            }
+          }}
+          className="w-full focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words"
+          style={{
+            color: props.textColor || "#1f2937",
+            fontSize: props.fontSize || "2rem",
+            fontWeight: props.fontWeight || "bold",
+            textAlign: props.textAlign || "left" as any,
+          }}
+          autoFocus
+        />
+      ) : (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditText(props.text || "");
+            setIsEditing(true);
+          }}
+          style={{
+            color: props.textColor || "#1f2937",
+            fontSize: props.fontSize || "2rem",
+            fontWeight: props.fontWeight || "bold",
+            textAlign: props.textAlign || "left" as any,
+          }}
+          className="cursor-text break-words whitespace-pre-wrap"
+        >
+          {props.text || "Heading Text"}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const ParagraphBlockPreview: React.FC<BlockPreviewProps> = ({
+  block,
+  isSelected,
+  onSelect,
+  onUpdate,
+}) => {
+  const props = block.properties;
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editText, setEditText] = React.useState(props.text || "");
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const handleSave = () => {
+    if (editText.trim()) {
+      onUpdate({ ...props, text: editText });
+    }
+    setIsEditing(false);
+  };
+
+  const adjustHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`cursor-pointer transition-all border ${
+        isSelected ? "border-valasys-orange" : "border-gray-200"
+      }`}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        padding: props.padding || "20px",
+      }}
+    >
+      {isEditing ? (
+        <textarea
+          ref={textareaRef}
+          value={editText}
+          onChange={(e) => {
+            setEditText(e.target.value);
+            adjustHeight();
+          }}
+          onBlur={handleSave}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setEditText(props.text || "");
+              setIsEditing(false);
+            }
+          }}
+          className="w-full focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words"
+          style={{
+            color: props.textColor || "#4b5563",
+            fontSize: props.fontSize || "1rem",
+            lineHeight: props.lineHeight || "1.6",
+            textAlign: props.textAlign || "left" as any,
+          }}
+          autoFocus
+        />
+      ) : (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditText(props.text || "");
+            setIsEditing(true);
+          }}
+          style={{
+            color: props.textColor || "#4b5563",
+            fontSize: props.fontSize || "1rem",
+            lineHeight: props.lineHeight || "1.6",
+            textAlign: props.textAlign || "left" as any,
+          }}
+          className="cursor-text break-words whitespace-pre-wrap"
+        >
+          {props.text || "Paragraph Text"}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const RichTextBlockPreview: React.FC<BlockPreviewProps> = ({
+  block,
+  isSelected,
+  onSelect,
+  onUpdate,
+}) => {
+  const props = block.properties;
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editText, setEditText] = React.useState(props.text || "");
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const handleSave = () => {
+    if (editText.trim()) {
+      onUpdate({ ...props, text: editText });
+    }
+    setIsEditing(false);
+  };
+
+  const adjustHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`cursor-pointer transition-all border ${
+        isSelected ? "border-valasys-orange" : "border-gray-200"
+      }`}
+      style={{
+        backgroundColor: props.backgroundColor || "#ffffff",
+        padding: props.padding || "20px",
+      }}
+    >
+      {isEditing ? (
+        <textarea
+          ref={textareaRef}
+          value={editText}
+          onChange={(e) => {
+            setEditText(e.target.value);
+            adjustHeight();
+          }}
+          onBlur={handleSave}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setEditText(props.text || "");
+              setIsEditing(false);
+            }
+          }}
+          className="w-full focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words font-mono text-xs"
+          style={{
+            color: props.textColor || "#4b5563",
+            fontSize: props.fontSize || "1rem",
+            lineHeight: props.lineHeight || "1.6",
+          }}
+          autoFocus
+        />
+      ) : (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditText(props.text || "");
+            setIsEditing(true);
+          }}
+          style={{
+            color: props.textColor || "#4b5563",
+            fontSize: props.fontSize || "1rem",
+            lineHeight: props.lineHeight || "1.6",
+          }}
+          className="cursor-text break-words"
+          dangerouslySetInnerHTML={{ __html: props.text || "<p>Rich text content</p>" }}
+        />
+      )}
+    </div>
+  );
+};
+
+export const QuoteBlockPreview: React.FC<BlockPreviewProps> = ({
+  block,
+  isSelected,
+  onSelect,
+  onUpdate,
+}) => {
+  const props = block.properties;
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editQuote, setEditQuote] = React.useState(props.quoteText || "");
+  const [editAuthor, setEditAuthor] = React.useState(props.authorName || "");
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const handleSave = () => {
+    if (editQuote.trim()) {
+      onUpdate({ ...props, quoteText: editQuote, authorName: editAuthor });
+    }
+    setIsEditing(false);
+  };
+
+  const borderStyle: React.CSSProperties = {
+    borderLeft:
+      props.borderPosition === "left"
+        ? `${props.borderWidth || "4px"} solid ${props.borderColor || "#FF6A00"}`
+        : undefined,
+    borderTop:
+      props.borderPosition === "top"
+        ? `${props.borderWidth || "4px"} solid ${props.borderColor || "#FF6A00"}`
+        : undefined,
+    borderRight:
+      props.borderPosition === "right"
+        ? `${props.borderWidth || "4px"} solid ${props.borderColor || "#FF6A00"}`
+        : undefined,
+    borderBottom:
+      props.borderPosition === "bottom"
+        ? `${props.borderWidth || "4px"} solid ${props.borderColor || "#FF6A00"}`
+        : undefined,
+  };
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`cursor-pointer transition-all border ${
+        isSelected ? "border-valasys-orange" : "border-gray-200"
+      }`}
+      style={{
+        backgroundColor: props.backgroundColor || "#f3f4f6",
+        padding: props.padding || "24px",
+        ...borderStyle,
+      }}
+    >
+      {isEditing ? (
+        <div className="space-y-3">
+          <textarea
+            ref={textareaRef}
+            value={editQuote}
+            onChange={(e) => setEditQuote(e.target.value)}
+            onBlur={handleSave}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setEditQuote(props.quoteText || "");
+                setEditAuthor(props.authorName || "");
+                setIsEditing(false);
+              }
+            }}
+            className="w-full focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words italic"
+            style={{
+              color: props.textColor || "#1f2937",
+              fontSize: props.quoteSize || "1.5rem",
+            }}
+            placeholder="Quote text"
+            autoFocus
+          />
+          <input
+            type="text"
+            value={editAuthor}
+            onChange={(e) => setEditAuthor(e.target.value)}
+            onBlur={handleSave}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSave();
+              if (e.key === "Escape") {
+                setEditQuote(props.quoteText || "");
+                setEditAuthor(props.authorName || "");
+                setIsEditing(false);
+              }
+            }}
+            className="w-full focus:outline-none bg-transparent text-sm"
+            style={{
+              color: props.textColor || "#1f2937",
+              fontSize: props.authorSize || "0.875rem",
+            }}
+            placeholder="Author name"
+          />
+        </div>
+      ) : (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditQuote(props.quoteText || "");
+            setEditAuthor(props.authorName || "");
+            setIsEditing(true);
+          }}
+          className="cursor-text"
+        >
+          <blockquote
+            style={{
+              color: props.textColor || "#1f2937",
+              fontSize: props.quoteSize || "1.5rem",
+              marginBottom: "0.5rem",
+            }}
+            className="italic break-words whitespace-pre-wrap"
+          >
+            "{props.quoteText}"
+          </blockquote>
+          <p
+            style={{
+              color: props.textColor || "#1f2937",
+              fontSize: props.authorSize || "0.875rem",
+            }}
+          >
+            — {props.authorName}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
