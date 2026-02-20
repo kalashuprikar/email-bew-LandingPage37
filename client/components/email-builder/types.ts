@@ -628,6 +628,7 @@ export interface EmailTemplate {
   createdAt: string;
   updatedAt: string;
   backgroundColor: string;
+  documentBackgroundColor: string;
   padding: number;
 }
 

@@ -803,6 +803,7 @@ export function createEmptyTemplate(): EmailTemplate {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     backgroundColor: "#ffffff",
+    documentBackgroundColor: "#ffffff",
     padding: 20,
   };
 }
@@ -1450,21 +1451,22 @@ export function renderTemplateToHTML(template: EmailTemplate): string {
     })
     .join("");
 
+  const docBgColor = template.documentBackgroundColor || "#ffffff";
   return `<!DOCTYPE html>
-<html style="background-color: #ffffff; margin: 0; padding: 0;">
+<html style="background-color: ${docBgColor}; margin: 0; padding: 0;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${template.subject}</title>
   <style>
     html, body {
-      background-color: #ffffff !important;
+      background-color: ${docBgColor} !important;
       margin: 0;
       padding: 0;
     }
   </style>
 </head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #ffffff;">
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: ${docBgColor};">
   <div style="max-width: 600px; margin: 0 auto; background-color: ${template.backgroundColor}; border: 1px solid #ddd; border-radius: 4px; padding: ${template.padding}px; box-sizing: border-box; overflow: hidden;">
     ${bodyContent}
   </div>
@@ -1495,7 +1497,12 @@ export function saveTemplateToLocalStorage(template: EmailTemplate): void {
 
 export function getTemplatesFromLocalStorage(): EmailTemplate[] {
   const templates = localStorage.getItem("email_templates");
-  return templates ? JSON.parse(templates) : [];
+  const parsed = templates ? JSON.parse(templates) : [];
+  // Backwards compatibility: add documentBackgroundColor if missing
+  return parsed.map((template: any) => ({
+    ...template,
+    documentBackgroundColor: template.documentBackgroundColor || "#ffffff",
+  }));
 }
 
 export function deleteTemplateFromLocalStorage(id: string): void {

@@ -393,6 +393,12 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
                       backgroundColor: color,
                     })
                   }
+                  onDocumentBackgroundColorChange={(color) =>
+                    setTemplate({
+                      ...template,
+                      documentBackgroundColor: color,
+                    })
+                  }
                   onMoveBlock={handleMoveBlock}
                   onDuplicateBlock={handleDuplicateBlock}
                   onDeleteBlock={handleDeleteBlockById}

@@ -20,6 +20,7 @@ interface EmailCanvasProps {
   onFooterElementSelect?: (element: string | null) => void;
   onTemplateSubjectChange: (subject: string) => void;
   onBackgroundColorChange: (color: string) => void;
+  onDocumentBackgroundColorChange?: (color: string) => void;
   onMoveBlock: (dragIndex: number, hoverIndex: number) => void;
   onDuplicateBlock?: (block: ContentBlock, position: number) => void;
   onDeleteBlock?: (blockId: string) => void;
@@ -38,6 +39,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
   onFooterElementSelect,
   onTemplateSubjectChange,
   onBackgroundColorChange,
+  onDocumentBackgroundColorChange,
   onMoveBlock,
   onDuplicateBlock,
   onDeleteBlock,
@@ -93,7 +95,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                 htmlFor="bgColor"
                 className="text-xs font-medium text-gray-700 block"
               >
-                Background
+                Template Background
               </label>
               <div className="flex gap-2 mt-1 min-w-0">
                 <input
@@ -107,6 +109,30 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                   type="text"
                   value={template.backgroundColor}
                   onChange={(e) => onBackgroundColorChange(e.target.value)}
+                  className="text-sm border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-valasys-orange focus:border-transparent flex-1 mr-2"
+                  placeholder="#ffffff"
+                />
+              </div>
+            </div>
+            <div className="min-w-0 col-span-2">
+              <label
+                htmlFor="docBgColor"
+                className="text-xs font-medium text-gray-700 block"
+              >
+                Document Background
+              </label>
+              <div className="flex gap-2 mt-1 min-w-0">
+                <input
+                  id="docBgColor"
+                  type="color"
+                  value={template.documentBackgroundColor || "#ffffff"}
+                  onChange={(e) => onDocumentBackgroundColorChange?.(e.target.value)}
+                  className="text-sm w-10 h-10 border border-gray-300 rounded cursor-pointer flex-shrink-0 mr-2"
+                />
+                <input
+                  type="text"
+                  value={template.documentBackgroundColor || "#ffffff"}
+                  onChange={(e) => onDocumentBackgroundColorChange?.(e.target.value)}
                   className="text-sm border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-valasys-orange focus:border-transparent flex-1 mr-2"
                   placeholder="#ffffff"
                 />
