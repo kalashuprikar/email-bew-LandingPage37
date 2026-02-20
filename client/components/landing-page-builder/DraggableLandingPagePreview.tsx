@@ -474,16 +474,16 @@ export const DraggableLandingPagePreview: React.FC<
         className={`transition-all py-8 border-2 border-dashed rounded-lg ${
           isOver
             ? "border-valasys-orange bg-orange-50"
-            : "border-gray-300 bg-gray-50"
+            : "border-transparent bg-transparent"
         }`}
       >
-        <div className="text-center">
-          <p className="text-sm text-gray-500">
-            {isOver
-              ? "Drop block here"
-              : "Drag blocks from left panel to add here"}
-          </p>
-        </div>
+        {isOver && (
+          <div className="text-center">
+            <p className="text-sm text-gray-500">
+              Drop block here
+            </p>
+          </div>
+        )}
       </div>
     );
   };
