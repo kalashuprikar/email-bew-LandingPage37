@@ -20,6 +20,7 @@ interface EmailCanvasProps {
   onFooterElementSelect?: (element: string | null) => void;
   onTemplateSubjectChange: (subject: string) => void;
   onBackgroundColorChange: (color: string) => void;
+  onDocumentBackgroundColorChange?: (color: string) => void;
   onMoveBlock: (dragIndex: number, hoverIndex: number) => void;
   onDuplicateBlock?: (block: ContentBlock, position: number) => void;
   onDeleteBlock?: (blockId: string) => void;
@@ -38,6 +39,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
   onFooterElementSelect,
   onTemplateSubjectChange,
   onBackgroundColorChange,
+  onDocumentBackgroundColorChange,
   onMoveBlock,
   onDuplicateBlock,
   onDeleteBlock,
@@ -93,7 +95,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                 htmlFor="bgColor"
                 className="text-xs font-medium text-gray-700 block"
               >
-                Background
+                Template Background
               </label>
               <div className="flex gap-2 mt-1 min-w-0">
                 <input
@@ -112,6 +114,30 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
                 />
               </div>
             </div>
+            <div className="min-w-0 col-span-2">
+              <label
+                htmlFor="docBgColor"
+                className="text-xs font-medium text-gray-700 block"
+              >
+                Document Background
+              </label>
+              <div className="flex gap-2 mt-1 min-w-0">
+                <input
+                  id="docBgColor"
+                  type="color"
+                  value={template.documentBackgroundColor || "#ffffff"}
+                  onChange={(e) => onDocumentBackgroundColorChange?.(e.target.value)}
+                  className="text-sm w-10 h-10 border border-gray-300 rounded cursor-pointer flex-shrink-0 mr-2"
+                />
+                <input
+                  type="text"
+                  value={template.documentBackgroundColor || "#ffffff"}
+                  onChange={(e) => onDocumentBackgroundColorChange?.(e.target.value)}
+                  className="text-sm border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-valasys-orange focus:border-transparent flex-1 mr-2"
+                  placeholder="#ffffff"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -119,12 +145,11 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
         <div
           ref={drop}
           style={{
-            backgroundColor: template.backgroundColor,
-            padding: `${template.padding}px`,
+            backgroundColor: template.documentBackgroundColor || "#ffffff",
           }}
           className={cn(
-            "bg-white border border-t-0 border-gray-200 rounded-b-lg shadow-sm min-h-96 transition-all",
-            isOver && "ring-2 ring-valasys-orange bg-orange-50",
+            "border border-t-0 border-gray-200 rounded-b-lg shadow-sm min-h-96 transition-all p-4",
+            isOver && "ring-2 ring-valasys-orange",
           )}
           onClick={(e) => {
             // Only deselect inline group if clicking on empty canvas area
@@ -133,7 +158,14 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
             }
           }}
         >
-          {template.blocks.length === 0 ? (
+          <div
+            style={{
+              backgroundColor: template.backgroundColor,
+              padding: `${template.padding}px`,
+            }}
+            className="bg-white border border-gray-200 rounded-lg shadow-sm"
+          >
+            {template.blocks.length === 0 ? (
             <div className="flex items-center justify-center py-16">
               <div className="w-full max-w-md">
                 <DropZone position={0} onBlockDrop={onAddBlock} isEmpty={true} />
@@ -338,6 +370,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
               })}
             </div>
           )}
+          </div>
         </div>
       </div>
     </div>

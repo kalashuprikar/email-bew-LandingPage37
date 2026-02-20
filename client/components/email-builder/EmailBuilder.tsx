@@ -79,10 +79,10 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
         name: templateName,
         subject: templateSubject,
       };
-      setTemplate(updated);
+      saveTemplateToLocalStorage(updated);
     }, 500);
     return () => clearTimeout(timer);
-  }, [templateName, templateSubject]);
+  }, [template, templateName, templateSubject]);
 
   const selectedBlock =
     template.blocks.find((b) => b.id === selectedBlockId) || null;
@@ -391,6 +391,12 @@ export const EmailBuilder: React.FC<EmailBuilderProps> = ({
                     setTemplate({
                       ...template,
                       backgroundColor: color,
+                    })
+                  }
+                  onDocumentBackgroundColorChange={(color) =>
+                    setTemplate({
+                      ...template,
+                      documentBackgroundColor: color,
                     })
                   }
                   onMoveBlock={handleMoveBlock}
