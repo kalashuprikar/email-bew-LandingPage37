@@ -511,6 +511,7 @@ export interface TwoColumnCardBlock {
   }[];
   width: number;
   widthUnit: "px" | "%";
+  spacing?: number;
   visibility: "all" | "desktop" | "mobile";
 }
 

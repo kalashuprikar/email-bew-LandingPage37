@@ -3,6 +3,7 @@ import { SplitImageCardBlock } from "../types";
 import { Upload, Copy, Trash2, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { getPaddingString, getMarginString } from "../utils";
 
 interface SplitImageCardBlockComponentProps {
   block: SplitImageCardBlock;
@@ -458,7 +459,8 @@ export const SplitImageCardBlockComponent: React.FC<
         backgroundColor: block.backgroundColor,
         border: `${block.borderWidth}px solid ${block.borderColor}`,
         borderRadius: `${block.borderRadius}px`,
-        margin: `${block.margin}px`,
+        margin: getMarginString(block),
+        padding: getPaddingString(block),
       }}
     >
       <div className="max-w-2xl mx-auto">

@@ -4,6 +4,7 @@ import { ContentBlock } from "../types";
 import { Upload, Edit2, Copy, Trash2, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { getPaddingString, getMarginString } from "../utils";
 
 interface CenteredImageCardBlockComponentProps {
   block: CenteredImageCardBlock;
@@ -450,8 +451,8 @@ export const CenteredImageCardBlockComponent: React.FC<
         backgroundColor: block.backgroundColor,
         border: `${block.borderWidth}px solid ${block.borderColor}`,
         borderRadius: `${block.borderRadius}px`,
-        margin: `${block.margin}px`,
-        padding: `${block.padding}px`,
+        margin: getMarginString(block),
+        padding: getPaddingString(block),
       }}
     >
       <div className="w-full">

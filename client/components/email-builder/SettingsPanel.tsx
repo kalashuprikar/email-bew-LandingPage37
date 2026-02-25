@@ -7097,7 +7097,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             {/* Styling Section */}
             <div>
               <h4 className="text-xs font-bold text-gray-900 mb-3">Styling</h4>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
                   <Label className="text-xs text-gray-700 mb-1 block">
                     Background Color
@@ -7130,76 +7130,88 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   />
                 </div>
 
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Border Width (px)
-                  </Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={(block as any).borderWidth || 0}
-                    onChange={(e) =>
-                      onBlockUpdate({
-                        ...block,
-                        borderWidth: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="focus:ring-valasys-orange focus:ring-2"
-                  />
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label className="text-xs text-gray-700 mb-1 block">
+                      Border Width (px)
+                    </Label>
+                    <Input
+                      type="number"
+                      min="0"
+                      value={(block as any).borderWidth || 0}
+                      onChange={(e) =>
+                        onBlockUpdate({
+                          ...block,
+                          borderWidth: parseInt(e.target.value) || 0,
+                        })
+                      }
+                      className="focus:ring-valasys-orange focus:ring-2"
+                    />
+                  </div>
+
+                  <div>
+                    <Label className="text-xs text-gray-700 mb-1 block">
+                      Border Radius (px)
+                    </Label>
+                    <Input
+                      type="number"
+                      min="0"
+                      value={(block as any).borderRadius || 0}
+                      onChange={(e) =>
+                        onBlockUpdate({
+                          ...block,
+                          borderRadius: parseInt(e.target.value) || 0,
+                        })
+                      }
+                      className="focus:ring-valasys-orange focus:ring-2"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Border Radius (px)
-                  </Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={(block as any).borderRadius || 0}
-                    onChange={(e) =>
-                      onBlockUpdate({
-                        ...block,
-                        borderRadius: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="focus:ring-valasys-orange focus:ring-2"
-                  />
-                </div>
+                <div className="pt-2">
+                  <h4 className="text-xs font-bold text-gray-900 mb-4">Spacing</h4>
 
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Margin (px)
-                  </Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={(block as any).margin || 0}
-                    onChange={(e) =>
-                      onBlockUpdate({
-                        ...block,
-                        margin: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="focus:ring-valasys-orange focus:ring-2"
-                  />
-                </div>
+                  <div className="space-y-6">
+                    <SpacingSettings
+                      label="Padding"
+                      tooltip="Inner space between content and border"
+                      values={{
+                        top: (block as any).paddingTop ?? (block as any).padding ?? 0,
+                        right: (block as any).paddingRight ?? (block as any).padding ?? 0,
+                        bottom: (block as any).paddingBottom ?? (block as any).padding ?? 0,
+                        left: (block as any).paddingLeft ?? (block as any).padding ?? 0,
+                      }}
+                      onChange={(v) =>
+                        onBlockUpdate({
+                          ...block,
+                          paddingTop: v.top,
+                          paddingRight: v.right,
+                          paddingBottom: v.bottom,
+                          paddingLeft: v.left,
+                        })
+                      }
+                    />
 
-                <div>
-                  <Label className="text-xs text-gray-700 mb-1 block">
-                    Padding (px)
-                  </Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={(block as any).padding || 0}
-                    onChange={(e) =>
-                      onBlockUpdate({
-                        ...block,
-                        padding: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="focus:ring-valasys-orange focus:ring-2"
-                  />
+                    <SpacingSettings
+                      label="Margin"
+                      tooltip="Outer space around the block"
+                      values={{
+                        top: (block as any).marginTop ?? (block as any).margin ?? 0,
+                        right: (block as any).marginRight ?? (block as any).margin ?? 0,
+                        bottom: (block as any).marginBottom ?? (block as any).margin ?? 0,
+                        left: (block as any).marginLeft ?? (block as any).margin ?? 0,
+                      }}
+                      onChange={(v) =>
+                        onBlockUpdate({
+                          ...block,
+                          marginTop: v.top,
+                          marginRight: v.right,
+                          marginBottom: v.bottom,
+                          marginLeft: v.left,
+                        })
+                      }
+                    />
+                  </div>
                 </div>
               </div>
             </div>
