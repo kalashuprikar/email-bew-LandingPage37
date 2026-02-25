@@ -64,7 +64,7 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
       onMouseLeave={() => setIsHovering(false)}
       style={{
         margin: `${block.margin}px`,
-        textAlign: block.alignment as any,
+        display: "block",
         userSelect: "none",
       }}
     >
@@ -75,7 +75,7 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
           onBlur={() => onEditingChange?.(null)}
           onClick={(e) => e.stopPropagation()}
           autoFocus
-          className="rounded px-2 py-1 font-serif outline-none"
+          className="w-full rounded px-2 py-1 font-serif outline-none"
           style={{
             fontSize: `${block.fontSize}px`,
             color: block.fontColor,
@@ -96,8 +96,6 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
             wordWrap: "break-word",
             overflowWrap: "break-word",
             whiteSpace: "normal",
-            display: "inline-block",
-            margin: block.alignment === "center" ? "0 auto" : "0",
           }}
         />
       ) : (
@@ -116,14 +114,13 @@ export const TextBlockComponent: React.FC<TextBlockComponentProps> = ({
             borderColor: block.borderColor,
             borderStyle: block.borderWidth > 0 ? "solid" : "none",
             borderRadius: `${block.borderRadius}px`,
-            margin: block.alignment === "center" ? "0 auto" : "0",
+            margin: 0,
             userSelect: "none",
             boxSizing: "border-box",
             overflow: "hidden",
             wordWrap: "break-word",
             overflowWrap: "break-word",
             whiteSpace: "normal",
-            display: "inline-block",
           }}
         >
           {block.content}
