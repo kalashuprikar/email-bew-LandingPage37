@@ -248,8 +248,9 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>
-    <div className="flex h-screen bg-gray-100" style={{ transform: 'scale(0.8)', transformOrigin: 'top left', width: '125%', height: '125%' }}>
+    <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left', width: '125%', height: '125%' }}>
+      <DndProvider backend={HTML5Backend}>
+      <div className="flex h-screen bg-gray-100">
       {/* Left Sidebar - Blocks Panel */}
       <div className="w-96 bg-white border-r border-gray-200 overflow-hidden flex flex-col">
         <div className="sticky top-0 z-20 bg-white border-b border-gray-200 p-4">
@@ -389,7 +390,8 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
           />
         )}
       </div>
+      </div>
+      </DndProvider>
     </div>
-    </DndProvider>
   );
 };
