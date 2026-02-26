@@ -329,7 +329,7 @@ export const LandingPageBuilder: React.FC<LandingPageBuilderProps> = ({
 
         {/* Preview Area */}
         <div className="flex-1 overflow-y-auto bg-gray-50 p-8">
-          <div className="max-w-4xl mx-auto">
+          <div>
             <DraggableLandingPagePreview
               page={page}
               selectedBlockId={selectedBlockId}
